@@ -1,13 +1,18 @@
 package com.nilo.necroslayer;
 
+import java.awt.RenderingHints.Key;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -27,8 +32,8 @@ public class Necroslayer extends ApplicationAdapter {
 	Texture texture;
 	Sprite sprite;
 	TextureAtlas textureAtlas;
-	int currentFrame = 1;
-	String currentAtlasKey = new String("000");
+	Animation<TextureRegion> animation, andarAnimation;
+	private float elapsedTime = 0;
 	float unitScale = 1 / 16f;
 	FitViewport viewport;
 	Player player;
@@ -37,24 +42,14 @@ public class Necroslayer extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
-		AtlasRegion region = textureAtlas.findRegion("000");
-		sprite = new Sprite(region);
-        sprite.setPosition(120, 100);
-        sprite.scale(2.5f);
-        Timer.schedule(new Task(){
-            @Override
-            public void run() {
-                currentFrame++;
-                if(currentFrame > 1)
-                    currentFrame = 0;
-                
-                currentAtlasKey = String.format("%03d", currentFrame);
-                sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
-            }
-        }
-        ,0,1/30.0f);
+        animation = new Animation<TextureRegion>(1f, textureAtlas.getRegions());
 		tiledMap = new TmxMapLoader().load("mapa_1.tmx");
 		tMR = new OrthogonalTiledMapRenderer(tiledMap);
+		andarAnimation = new Animation<TextureRegion>(0.2f,
+	            (textureAtlas.findRegion("000")),
+	            (textureAtlas.findRegion("001")));
+
+	  
 		OrthographicCamera camera= new OrthographicCamera();
 		camera.setToOrtho(false, 256, 176);
 		camera.update();
@@ -70,7 +65,8 @@ public class Necroslayer extends ApplicationAdapter {
 		tMR.setView((OrthographicCamera)viewport.getCamera());
 		tMR.render();
 		batch.begin();
-        sprite.draw(batch);
+		elapsedTime += Gdx.graphics.getDeltaTime();
+	    batch.draw(andarAnimation.getKeyFrame(elapsedTime, true), 0, 0);
         batch.end();
         
 		
