@@ -1,31 +1,45 @@
 package com.nilo.necroslayer;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.graphics.GL20;
 public class Necroslayer extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
 	
+	OrthogonalTiledMapRenderer tMR;
+	TiledMap tiledMap;
+	
+	float unitScale = 1 / 16f;
+	FitViewport viewport;
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		tiledMap = new TmxMapLoader().load("mapa_1.tmx");
+		tMR = new OrthogonalTiledMapRenderer(tiledMap);
+		OrthographicCamera camera= new OrthographicCamera();
+		camera.setToOrtho(false, 256, 176);
+		camera.update();
+		viewport = new FitViewport(256, 176, camera);
+		
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		viewport.update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+		tMR.setView((OrthographicCamera)viewport.getCamera());
+		tMR.render();
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		
 	}
 }
