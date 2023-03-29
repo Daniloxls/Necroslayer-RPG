@@ -35,6 +35,7 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 	Sprite sprite;
 	TextureAtlas textureAtlas;
 	Animation<Sprite> animation, southAnimation, northAnimation ,eastAnimation ,westAnimation;
+	Animation<Sprite> walkAnimation;
 	private float elapsedTime = 0;
 	float unitScale = 1 / 16f;
 	FitViewport viewport;
@@ -62,7 +63,7 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 	            (textureAtlas.createSprite("004")),
 	            (textureAtlas.createSprite("005")));
 
-	  
+		walkAnimation = southAnimation;
 		OrthographicCamera camera= new OrthographicCamera();
 		camera.setToOrtho(false, 256, 176);
 		camera.update();
@@ -83,9 +84,9 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		if(elapsedTime > 1) {
 			elapsedTime = 0;
 		}
-		System.out.println(elapsedTime);
 	    //batch.draw(andarAnimation.getKeyFrame(elapsedTime, true), 0, 0);
-	    spriteanda = (Sprite)westAnimation.getKeyFrame(elapsedTime);
+		
+	    spriteanda = (Sprite)walkAnimation.getKeyFrame(elapsedTime);
 	    batch.draw(spriteanda, (player.posX*40)-7, (player.posY*43.6f)-5, 0, 0, spriteanda.getWidth(), spriteanda.getHeight(),
 	    		2.7f, 2.7f, 0);
         batch.end();
@@ -104,15 +105,19 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.LEFT) {
 			player.posX --;
+			walkAnimation = player.westAnimation;
 		}
 		else if(keycode == Keys.RIGHT) {
 			player.posX ++;
+			walkAnimation = player.eastAnimation;
 		}
 		else if(keycode == Keys.DOWN) {
 			player.posY --;
+			walkAnimation = player.southAnimation;
 		}
 		else if(keycode == Keys.UP) {
 			player.posY ++;
+			walkAnimation = player.northAnimation;
 		}
 		return true;
 	}
