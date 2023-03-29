@@ -15,12 +15,14 @@ public class Player extends Actor {
 	}
 	static final float SIZE = 1f;
 	World world;
-	Vector2 position = new Vector2();
+	public int posX;
+	public int posY;
 	State state = State.IDLE;
 	Rectangle bounds = new Rectangle();
 	
-	public Player(Vector2 position) {
-		this.position = position;
+	public Player(int posX, int posY) {
+		this.posX = posX;
+		this.posY = posY;
 		this.bounds.height = SIZE;
 		this.bounds.width = SIZE;
 
