@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -27,7 +28,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.nilo.necroslayer.model.Player;
 import com.badlogic.gdx.math.Vector2;
 public class Necroslayer extends ApplicationAdapter implements ApplicationListener, InputProcessor {
-	
 	OrthogonalTiledMapRenderer tMR;
 	TiledMap tiledMap;
 	SpriteBatch batch;
@@ -41,9 +41,13 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 	FitViewport viewport;
 	Player player;
 	Sprite spriteanda;
+	BitmapFont font;
+	// Debug Info
+	String time, cXY, tXY;
 	int initX = 0, initY = 0;
 	@Override
 	public void create () {
+		font  = new BitmapFont();
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
 		tiledMap = new TmxMapLoader().load("mapa_0.tmx");
@@ -70,16 +74,18 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 			elapsedTime += 0.08;
 		}
 		player.walk();
-		System.out.println(player.targetX);
-		//System.out.println(player.isMovingRight);
 		if(elapsedTime > 1) {
 			elapsedTime = 0;
 		}
-	    //batch.draw(andarAnimation.getKeyFrame(elapsedTime, true), 0, 0);
-		
 	    spriteanda = (Sprite)player.currentAnimation.getKeyFrame(elapsedTime);
 	    batch.draw(spriteanda, player.posX, player.posY, 0, 0, spriteanda.getWidth(), spriteanda.getHeight(),
 	    		2.7f, 2.7f, 0);
+	    time = String.format("%f",elapsedTime);
+	    cXY = String.format("%d , %d",player.getTileX(), player.getTileY());
+	    tXY = String.format("%d , %d",player.targetX, player.targetY);
+	    font.draw(batch, time, 0, 460);
+	    font.draw(batch, cXY, 0, 445);
+	    font.draw(batch, tXY, 0, 430);
         batch.end();
         
 		
@@ -97,19 +103,18 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		if(keycode == Keys.F1) {
 			System.out.println(player.isMovingRight);
 		}
-		if(keycode == Keys.LEFT & player.inTarget()) {
+		if(keycode == Keys.LEFT) {
 			player.isMovingLeft = true;
 		}
-		else if(keycode == Keys.RIGHT & player.inTarget()) {
+		if(keycode == Keys.RIGHT) {
 			player.isMovingRight = true;
 		}
-		else if(keycode == Keys.DOWN & player.inTarget()) {
+		if(keycode == Keys.DOWN) {
 			player.isMovingDown = true;
 		}
-		else if(keycode == Keys.UP & player.inTarget()) {
+		if(keycode == Keys.UP) {
 			player.isMovingUp = true;
 		}
-		player.setAnimation(keycode);
 		
 		return true;
 		}
@@ -119,13 +124,13 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		if(keycode == Keys.LEFT) {
 			player.isMovingLeft = false;
 	}
-		else if(keycode == Keys.RIGHT) {
+		if(keycode == Keys.RIGHT) {
 			player.isMovingRight = false;
 	}
-		else if(keycode == Keys.UP) {
+		if(keycode == Keys.UP) {
 			player.isMovingUp = false;
 	}
-		else if(keycode == Keys.DOWN) {
+		if(keycode == Keys.DOWN) {
 			player.isMovingDown = false;
 	}
 		return true;

@@ -43,6 +43,7 @@ public class Player extends Actor {
 	public Animation<Sprite> currentAnimation;
 
 	State state = State.IDLE;
+	Direction direction = Direction.DOWN;
 	Rectangle bounds = new Rectangle();
 	
 	public Player(int tileX, int tileY) {
@@ -62,24 +63,24 @@ public class Player extends Actor {
 		this.isMovingDown = false;
 		
 	}
-	public void setAnimation(int keycode) {
-		if(keycode == Keys.LEFT) {
+	public void setAnimation(Direction direct) {
+		if(direct == Direction.LEFT) {
 			this.currentAnimation = this.westAnimation;
 		}
-		else if(keycode == Keys.RIGHT) {
+		if(direct == Direction.RIGHT) {
 			this.currentAnimation = this.eastAnimation;
 		}
-		else if(keycode == Keys.DOWN) {
+		if(direct == Direction.DOWN) {
 			this.currentAnimation = this.southAnimation;
 		}
-		else if(keycode == Keys.UP) {
+		if(direct == Direction.UP) {
 			this.currentAnimation = this.northAnimation;
 		}
 		
 	}
 	
 	public void setWalking() {
-		if(this.getTileX() == this.targetX & this.getTileY() == this.targetY) {
+		if(this.inTarget()) {
 			this.isWalking = false;
 		}
 		else {
@@ -98,34 +99,39 @@ public class Player extends Actor {
 	public void walk() {
 		if(this.isWalking) {
 			if(this.getTileX() > this.targetX) {
-				this.posX -= 1f;
+				this.posX -= 2f;
 			}
 			else if(this.getTileX() < this.targetX){
-				this.posX += 1f;
+				this.posX += 2f;
 			}
 			if(this.getTileY() > this.targetY) {
-				this.posY -= 1f;
+				this.posY -= 2f;
 			}
 			else if(this.getTileY() < this.targetY){
-				this.posY += 1f;
+				this.posY += 2f;
 			}
 			this.setWalking();
 		}
-		if(this.isWalking == false) {
-			if(this.isMovingLeft) {
-				this.targetX --;
+			if (this.inTarget()) {
+				if(this.isMovingLeft) {
+					this.targetX --;
+					this.direction = Direction.LEFT;
+				}
+				if(this.isMovingRight) {
+					this.targetX ++;
+					this.direction = Direction.RIGHT;
+				}
+				if((this.isMovingUp) & !(this.isMovingLeft)& !(this.isMovingRight)) {
+					this.targetY ++;
+					this.direction = Direction.UP;
+				}
+				if((this.isMovingDown) & !(this.isMovingLeft)& !(this.isMovingRight)) {
+					this.targetY --;
+					this.direction = Direction.DOWN;
+				}
+				this.setWalking();
+				this.setAnimation(this.direction);
 			}
-			else if(this.isMovingRight) {
-				this.targetX ++;
-			}
-			else if(this.isMovingUp) {
-				this.targetY ++;
-			}
-			else if(this.isMovingDown) {
-				this.targetY --;
-			}
-			this.setWalking();
-		}
 		}
 	public int getTileX(){
 		return (int)((this.posX + 7f)/40f);
