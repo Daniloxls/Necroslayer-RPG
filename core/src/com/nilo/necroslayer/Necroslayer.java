@@ -48,27 +48,13 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
 		tiledMap = new TmxMapLoader().load("mapa_0.tmx");
 		tMR = new OrthogonalTiledMapRenderer(tiledMap);
-		southAnimation = new Animation<Sprite>(0.2f,
-	            (textureAtlas.createSprite("000")),
-	            (textureAtlas.createSprite("001")));
-		
-		northAnimation = new Animation<Sprite>(0.2f,
-	            (textureAtlas.createSprite("002")),
-	            (textureAtlas.createSprite("003")));
-		
-		eastAnimation = new Animation<Sprite>(0.2f,
-				(textureAtlas.createSprite("006")),
-	            (textureAtlas.createSprite("007")));
-		westAnimation = new Animation<Sprite>(0.2f,
-	            (textureAtlas.createSprite("004")),
-	            (textureAtlas.createSprite("005")));
-
-		walkAnimation = southAnimation;
+		player = new Player(initX, initY);
+		walkAnimation = player.currentAnimation;
 		OrthographicCamera camera= new OrthographicCamera();
 		camera.setToOrtho(false, 256, 176);
 		camera.update();
 		viewport = new FitViewport(256, 176, camera);
-		player = new Player(initX, initY);
+		
 		Gdx.input.setInputProcessor(this);
 		
 	}
@@ -80,14 +66,18 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		tMR.setView((OrthographicCamera)viewport.getCamera());
 		tMR.render();
 		batch.begin();
-		elapsedTime += 0.08;
+		if(player.isWalking) {
+			elapsedTime += 0.08;
+			player.walk();
+		}
+		System.out.printf("%d, %d\n", player.getTileX(), player.getTileY());
 		if(elapsedTime > 1) {
 			elapsedTime = 0;
 		}
 	    //batch.draw(andarAnimation.getKeyFrame(elapsedTime, true), 0, 0);
 		
-	    spriteanda = (Sprite)walkAnimation.getKeyFrame(elapsedTime);
-	    batch.draw(spriteanda, (player.posX*40)-7, (player.posY*43.6f)-5, 0, 0, spriteanda.getWidth(), spriteanda.getHeight(),
+	    spriteanda = (Sprite)player.currentAnimation.getKeyFrame(elapsedTime);
+	    batch.draw(spriteanda, player.posX, player.posY, 0, 0, spriteanda.getWidth(), spriteanda.getHeight(),
 	    		2.7f, 2.7f, 0);
         batch.end();
         
@@ -103,28 +93,28 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if(keycode == Keys.LEFT) {
-			player.posX --;
-			walkAnimation = player.westAnimation;
+		if (player.isWalking == false) {
+		if(keycode == Keys.LEFT & player.inTarget()) {
+			player.targetX --;
 		}
-		else if(keycode == Keys.RIGHT) {
-			player.posX ++;
-			walkAnimation = player.eastAnimation;
+		else if(keycode == Keys.RIGHT & player.inTarget()) {
+			player.targetX ++;
 		}
-		else if(keycode == Keys.DOWN) {
-			player.posY --;
-			walkAnimation = player.southAnimation;
+		else if(keycode == Keys.DOWN & player.inTarget()) {
+			player.targetY --;
 		}
-		else if(keycode == Keys.UP) {
-			player.posY ++;
-			walkAnimation = player.northAnimation;
+		else if(keycode == Keys.UP & player.inTarget()) {
+			player.targetY ++;
 		}
-		return true;
+		player.setAnimation(keycode);
+		player.isWalking = true;
+		
 	}
+		return true;
+		}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
