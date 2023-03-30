@@ -68,9 +68,10 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		batch.begin();
 		if(player.isWalking) {
 			elapsedTime += 0.08;
-			player.walk();
 		}
-		System.out.printf("%d, %d\n", player.getTileX(), player.getTileY());
+		player.walk();
+		System.out.println(player.targetX);
+		//System.out.println(player.isMovingRight);
 		if(elapsedTime > 1) {
 			elapsedTime = 0;
 		}
@@ -93,29 +94,41 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (player.isWalking == false) {
+		if(keycode == Keys.F1) {
+			System.out.println(player.isMovingRight);
+		}
 		if(keycode == Keys.LEFT & player.inTarget()) {
-			player.targetX --;
+			player.isMovingLeft = true;
 		}
 		else if(keycode == Keys.RIGHT & player.inTarget()) {
-			player.targetX ++;
+			player.isMovingRight = true;
 		}
 		else if(keycode == Keys.DOWN & player.inTarget()) {
-			player.targetY --;
+			player.isMovingDown = true;
 		}
 		else if(keycode == Keys.UP & player.inTarget()) {
-			player.targetY ++;
+			player.isMovingUp = true;
 		}
 		player.setAnimation(keycode);
-		player.isWalking = true;
 		
-	}
 		return true;
 		}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		return false;
+		if(keycode == Keys.LEFT) {
+			player.isMovingLeft = false;
+	}
+		else if(keycode == Keys.RIGHT) {
+			player.isMovingRight = false;
+	}
+		else if(keycode == Keys.UP) {
+			player.isMovingUp = false;
+	}
+		else if(keycode == Keys.DOWN) {
+			player.isMovingDown = false;
+	}
+		return true;
 	}
 
 	@Override

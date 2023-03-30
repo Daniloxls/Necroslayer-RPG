@@ -21,7 +21,7 @@ public class Player extends Actor {
 	}
 	static final float SIZE = 1f;
 	World world;
-	public boolean isWalking;
+	public boolean isWalking,isMovingLeft, isMovingRight, isMovingUp, isMovingDown;
 	public float posX, posY;
 	public int targetX, targetY, tileX, tileY;
 	TextureAtlas textureAtlas= new TextureAtlas(Gdx.files.internal("bartz.atlas"));;
@@ -45,18 +45,22 @@ public class Player extends Actor {
 	State state = State.IDLE;
 	Rectangle bounds = new Rectangle();
 	
-	public Player(int posX, int posY) {
-		this.tileX = posX;
-		this.tileY = posY;
+	public Player(int tileX, int tileY) {
+		this.tileX = tileX;
+		this.tileY = tileY;
 		this.bounds.height = SIZE;
 		this.bounds.width = SIZE;
-		this.targetX = posX;
-		this.targetY = posY;
+		this.targetX = tileX;
+		this.targetY = tileY;
 		this.currentAnimation = this.southIdle;
 		this.isWalking = false;
-		this.posX = (posX*40f)-7;
-		this.posY = (posY*43.6f)-5;
-
+		this.posX = (tileX*40f)-7;
+		this.posY = (tileY*43.6f)-5;
+		this.isMovingLeft = false;
+		this.isMovingRight = false;
+		this.isMovingUp = false;
+		this.isMovingDown = false;
+		
 	}
 	public void setAnimation(int keycode) {
 		if(keycode == Keys.LEFT) {
@@ -77,6 +81,9 @@ public class Player extends Actor {
 	public void setWalking() {
 		if(this.getTileX() == this.targetX & this.getTileY() == this.targetY) {
 			this.isWalking = false;
+		}
+		else {
+			this.isWalking = true;
 		}
 	}
 	public boolean inTarget() {
@@ -101,6 +108,21 @@ public class Player extends Actor {
 			}
 			else if(this.getTileY() < this.targetY){
 				this.posY += 1f;
+			}
+			this.setWalking();
+		}
+		if(this.isWalking == false) {
+			if(this.isMovingLeft) {
+				this.targetX --;
+			}
+			else if(this.isMovingRight) {
+				this.targetX ++;
+			}
+			else if(this.isMovingUp) {
+				this.targetY ++;
+			}
+			else if(this.isMovingDown) {
+				this.targetY --;
 			}
 			this.setWalking();
 		}
