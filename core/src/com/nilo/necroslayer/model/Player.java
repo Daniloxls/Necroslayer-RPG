@@ -55,8 +55,8 @@ public class Player extends Actor {
 		this.targetY = tileY;
 		this.currentAnimation = this.southIdle;
 		this.isWalking = false;
-		this.posX = (tileX*40f)-7;
-		this.posY = (tileY*43.6f)-5;
+		this.posX = (tileX*64);
+		this.posY = (tileY*64);
 		this.isMovingLeft = false;
 		this.isMovingRight = false;
 		this.isMovingUp = false;
@@ -97,6 +97,7 @@ public class Player extends Actor {
 		}
 	}
 	public void walk() {
+		this.setWalking();
 		if(this.isWalking) {
 			if(this.getTileX() > this.targetX) {
 				this.posX -= 2f;
@@ -110,7 +111,6 @@ public class Player extends Actor {
 			else if(this.getTileY() < this.targetY){
 				this.posY += 2f;
 			}
-			this.setWalking();
 		}
 			if (this.inTarget()) {
 				if(this.isMovingLeft) {
@@ -133,11 +133,13 @@ public class Player extends Actor {
 				this.setAnimation(this.direction);
 			}
 		}
-	public int getTileX(){
-		return (int)((this.posX + 7f)/40f);
+	public float getTileX(){
+		//return (int)((this.posX + 7f)/40f);
+		return (this.posX)/64;
 	}
-	public int getTileY(){
-		return (int)((this.posY + 5f)/43.6f);
+	public float getTileY(){
+		//return (int)((this.posY + 5f)/43.6f);
+		return (this.posY)/64;
 	}
 	}
 	

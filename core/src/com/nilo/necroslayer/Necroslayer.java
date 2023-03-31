@@ -38,35 +38,41 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 	Animation<Sprite> walkAnimation;
 	private float elapsedTime = 0;
 	float unitScale = 1 / 16f;
+	final int GAME_WORLD_HEIGHT = 576;
+	final int GAME_WORLD_WIDTH = 1024;
 	FitViewport viewport;
 	Player player;
 	Sprite spriteanda;
 	BitmapFont font;
+	OrthographicCamera camera;
 	// Debug Info
-	String time, cXY, tXY;
+	String time, cXY, tXY, pXY;
 	int initX = 0, initY = 0;
 	@Override
 	public void create () {
 		font  = new BitmapFont();
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
-		tiledMap = new TmxMapLoader().load("mapa_0.tmx");
-		tMR = new OrthogonalTiledMapRenderer(tiledMap);
+		tiledMap = new TmxMapLoader().load("mapa_2.tmx");
+		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		player = new Player(initX, initY);
 		walkAnimation = player.currentAnimation;
-		OrthographicCamera camera= new OrthographicCamera();
-		camera.setToOrtho(false, 256, 176);
+		camera = new OrthographicCamera();
 		camera.update();
-		viewport = new FitViewport(256, 176, camera);
-		
+		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, camera);
+		viewport.apply();
 		Gdx.input.setInputProcessor(this);
 		
+	}
+	@Override
+	public void resize (int width, int height) {
+		viewport.update(width, height);
+		camera.position.set(GAME_WORLD_WIDTH/2, GAME_WORLD_HEIGHT/2, 0);
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		viewport.update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		tMR.setView((OrthographicCamera)viewport.getCamera());
 		tMR.render();
 		batch.begin();
@@ -77,15 +83,19 @@ public class Necroslayer extends ApplicationAdapter implements ApplicationListen
 		if(elapsedTime > 1) {
 			elapsedTime = 0;
 		}
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
 	    spriteanda = (Sprite)player.currentAnimation.getKeyFrame(elapsedTime);
-	    batch.draw(spriteanda, player.posX, player.posY, 0, 0, spriteanda.getWidth(), spriteanda.getHeight(),
-	    		2.7f, 2.7f, 0);
+	    batch.draw(spriteanda, player.posX, player.posY, 0, 0, 16, 16,
+	    		4, 4, 0);
 	    time = String.format("%f",elapsedTime);
-	    cXY = String.format("%d , %d",player.getTileX(), player.getTileY());
+	    cXY = String.format("%f , %f",player.getTileX(), player.getTileY());
 	    tXY = String.format("%d , %d",player.targetX, player.targetY);
-	    font.draw(batch, time, 0, 460);
-	    font.draw(batch, cXY, 0, 445);
-	    font.draw(batch, tXY, 0, 430);
+	    pXY = String.format("%f , %f",player.posX, player.posY);
+	    font.draw(batch, time, 0, 500);
+	    font.draw(batch, cXY, 0, 485);
+	    font.draw(batch, tXY, 0, 470);
+	    font.draw(batch, pXY, 0, 455);
         batch.end();
         
 		
