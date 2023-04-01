@@ -42,7 +42,7 @@ public class Necroslayer extends Game implements ApplicationListener{
 		font  = new BitmapFont();
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
-		tiledMap = new TmxMapLoader().load("mapa_2.tmx");
+		tiledMap = new TmxMapLoader().load("mapa_3.tmx");
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		player = new Player(initX, initY);
 		walkAnimation = player.currentAnimation;

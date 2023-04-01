@@ -1,16 +1,39 @@
 package com.nilo.necroslayer.model;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class Bloco {
-	static final int SIZE = 16;
-	 Vector2  position = new Vector2();
-	 Rectangle  bounds = new Rectangle();
-	 
-	 public Bloco(Vector2 pos) {
-		  this.position = pos;
-		  this.bounds.width = SIZE;
-		  this.bounds.height = SIZE;
-		 }
+	private int x,y;
+	private float pixelX,pixelY;
+	private BlocoItem item = new BlocoItem();
+	public boolean isWalkable = true;
+	private boolean haveAPlayer = false;
+	public Bloco (int x, int y){
+		this.x = x;
+		this.y = y;
+
+	}
+	public int getx() {
+		return this.x;
+	}
+	public int gety() {
+		return this.y;
+	}
+	public BlocoItem getItem() {
+		return item;
+	}
+	public void setItem(BlocoItem item) {
+		this.item = item;
+	}
+	public boolean isWalkable() {
+		return isWalkable;
+	}
+	public void setWalkable(boolean isWalkable) {
+		this.isWalkable = isWalkable;
+	}
+	public boolean isHaveAPlayer() {
+		return haveAPlayer;
+	}
+	public void setHaveAPlayer(boolean haveAPlayer) {
+		this.haveAPlayer = haveAPlayer;
+	}
 
 }

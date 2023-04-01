@@ -22,8 +22,8 @@ public class Player extends Actor {
 	static final float SIZE = 1f;
 	World world;
 	public boolean isWalking,isMovingLeft, isMovingRight, isMovingUp, isMovingDown;
-	public float posX, posY;
-	public int targetX, targetY, tileX, tileY;
+	public float posX, posY, tileX, tileY;
+	public int targetX, targetY;
 	TextureAtlas textureAtlas= new TextureAtlas(Gdx.files.internal("bartz.atlas"));;
 	public Animation<Sprite> southAnimation = new Animation<Sprite>(0.2f,
             (textureAtlas.createSprite("000")),
@@ -96,7 +96,7 @@ public class Player extends Actor {
 			return false;
 		}
 	}
-	public void walk() {
+	public void walk(MapaBlocos mapa) {
 		this.setWalking();
 		if(this.isWalking) {
 			if(this.getTileX() > this.targetX) {
@@ -114,31 +114,46 @@ public class Player extends Actor {
 		}
 			if (this.inTarget()) {
 				if(this.isMovingLeft) {
-					this.targetX --;
-					this.direction = Direction.LEFT;
+					if(this.targetX >0) {
+						if(mapa.gridBlocos[this.targetX - 1][this.targetY].isWalkable) {
+							this.targetX --;
+							this.direction = Direction.LEFT;
+						}
+					}
 				}
 				if(this.isMovingRight) {
-					this.targetX ++;
-					this.direction = Direction.RIGHT;
+					if(this.targetX < mapa.width-1) {
+						if(mapa.gridBlocos[this.targetX + 1][this.targetY].isWalkable) {
+							this.targetX ++;
+							this.direction = Direction.RIGHT;	
+							}
+						}
+					
 				}
 				if((this.isMovingUp) & !(this.isMovingLeft)& !(this.isMovingRight)) {
-					this.targetY ++;
-					this.direction = Direction.UP;
+					if(this.targetY < mapa.height-1) {
+						if(mapa.gridBlocos[this.targetX][this.targetY + 1].isWalkable) {
+							this.targetY ++;
+							this.direction = Direction.UP;	
+							}
+						}
 				}
 				if((this.isMovingDown) & !(this.isMovingLeft)& !(this.isMovingRight)) {
-					this.targetY --;
-					this.direction = Direction.DOWN;
+					if(this.targetY > 0) {
+						if(mapa.gridBlocos[this.targetX][this.targetY -1].isWalkable) {
+							this.targetY --;
+							this.direction = Direction.DOWN;	
+							}
+						}
 				}
 				this.setWalking();
 				this.setAnimation(this.direction);
 			}
 		}
 	public float getTileX(){
-		//return (int)((this.posX + 7f)/40f);
 		return (this.posX)/64;
 	}
 	public float getTileY(){
-		//return (int)((this.posY + 5f)/43.6f);
 		return (this.posY)/64;
 	}
 	}

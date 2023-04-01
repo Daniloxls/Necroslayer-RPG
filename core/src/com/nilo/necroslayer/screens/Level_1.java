@@ -10,17 +10,28 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.nilo.necroslayer.Necroslayer;
+import com.nilo.necroslayer.model.MapaBlocos;
 
 public class Level_1 extends ScreenAdapter implements InputProcessor{
 	Necroslayer game;
-	
+	MapaBlocos level_1;
 	public Level_1(Necroslayer game) {
 		this.game = game;
 	}
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(this);
 		
+		Gdx.input.setInputProcessor(this);
+		level_1 = new MapaBlocos(16,9);
+		level_1.gridBlocos[5][3].isWalkable = false;
+		level_1.gridBlocos[5][4].isWalkable = false;
+		level_1.gridBlocos[5][5].isWalkable = false;
+		level_1.gridBlocos[6][3].isWalkable = false;
+		level_1.gridBlocos[6][4].isWalkable = false;
+		level_1.gridBlocos[6][5].isWalkable = false;
+		level_1.gridBlocos[7][3].isWalkable = false;
+		level_1.gridBlocos[7][4].isWalkable = false;
+		level_1.gridBlocos[7][5].isWalkable = false;
 	}
 
 	@Override
@@ -34,7 +45,7 @@ public class Level_1 extends ScreenAdapter implements InputProcessor{
 		if(this.game.player.isWalking) {
 			this.game.elapsedTime += 0.08;
 		}
-		this.game.player.walk();
+		this.game.player.walk(level_1);
 		if(this.game.elapsedTime > 1) {
 			this.game.elapsedTime = 0;
 		}
