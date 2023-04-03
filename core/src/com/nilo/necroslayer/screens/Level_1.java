@@ -8,96 +8,145 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
 import com.nilo.necroslayer.model.MapaBlocos;
+import com.nilo.necroslayer.model.Player;
 
 public class Level_1 extends ScreenAdapter implements InputProcessor{
 	Necroslayer game;
 	MapaBlocos level_1;
+	PlayerCamera playcam;
+	Viewport viewport;
+	Player player;
+	Sprite spriteanda;
+	public Animation<Sprite> walkAnimation;
+	public OrthogonalTiledMapRenderer tMR;
+	public TiledMap tiledMap;
+	public Texture texture;
+	public Sprite sprite;
+	public TextureAtlas textureAtlas;
+	public SpriteBatch batch;
+	public BitmapFont font;
+	public final int GAME_WORLD_HEIGHT = 576;
+	public final int GAME_WORLD_WIDTH = 1024;
+	public String time, cXY, tXY, pXY;
 	public Level_1(Necroslayer game) {
 		this.game = game;
 	}
 	@Override
 	public void show() {
-		
+		font  = new BitmapFont();
+		batch = new SpriteBatch();
+		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
+		tiledMap = new TmxMapLoader().load("mapa_4.tmx");
+		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		Gdx.input.setInputProcessor(this);
-		level_1 = new MapaBlocos(16,9);
-		level_1.gridBlocos[5][3].isWalkable = false;
-		level_1.gridBlocos[5][4].isWalkable = false;
-		level_1.gridBlocos[5][5].isWalkable = false;
-		level_1.gridBlocos[6][3].isWalkable = false;
-		level_1.gridBlocos[6][4].isWalkable = false;
-		level_1.gridBlocos[6][5].isWalkable = false;
-		level_1.gridBlocos[7][3].isWalkable = false;
-		level_1.gridBlocos[7][4].isWalkable = false;
-		level_1.gridBlocos[7][5].isWalkable = false;
+		
+		level_1 = new MapaBlocos(20,16);
+		level_1.gridBlocos[5][10].isWalkable = false;
+		level_1.gridBlocos[5][11].isWalkable = false;
+		level_1.gridBlocos[5][12].isWalkable = false;
+		level_1.gridBlocos[6][10].isWalkable = false;
+		level_1.gridBlocos[6][11].isWalkable = false;
+		level_1.gridBlocos[6][12].isWalkable = false;
+		level_1.gridBlocos[7][10].isWalkable = false;
+		level_1.gridBlocos[7][11].isWalkable = false;
+		level_1.gridBlocos[7][12].isWalkable = false;
+		player = new Player(0, 0);
+		playcam = new PlayerCamera(player, level_1);
+		walkAnimation = player.currentAnimation;
+		playcam.update();
+		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
+		viewport.apply();
 	}
-
+	
+	@Override
+	public void resize (int width, int height) {
+		viewport.update(width, height);
+		playcam.position.set(GAME_WORLD_WIDTH/2, GAME_WORLD_HEIGHT/2, 0);
+	}
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		this.game.tMR.setView((OrthographicCamera)this.game.viewport.getCamera());
-		this.game.tMR.render();
-		this.game.batch.begin();
-		if(this.game.player.isWalking) {
+		tMR.setView((OrthographicCamera)viewport.getCamera());
+		tMR.render();
+		
+		batch.begin();
+		if(player.isWalking) {
 			this.game.elapsedTime += 0.08;
 		}
-		this.game.player.walk(level_1);
+		player.walk(level_1);
 		if(this.game.elapsedTime > 1) {
 			this.game.elapsedTime = 0;
 		}
-		this.game.camera.update();
-		this.game.batch.setProjectionMatrix(this.game.camera.combined);
-		this.game.spriteanda = (Sprite)this.game.player.currentAnimation.getKeyFrame(this.game.elapsedTime);
-		this.game.batch.draw(this.game.spriteanda, this.game.player.posX, this.game.player.posY, 0, 0, 16, 16,
+		playcam.update();
+		playcam.follow(player, level_1);
+		spriteanda = (Sprite)player.currentAnimation.getKeyFrame(this.game.elapsedTime);
+		batch.draw(spriteanda, player.posX, player.posY, 0, 0, 16, 16,
 		    		4, 4, 0);
-		this.game.time = String.format("%f",this.game.elapsedTime);
-		this.game.cXY = String.format("%f , %f",this.game.player.getTileX(), this.game.player.getTileY());
-		this.game.tXY = String.format("%d , %d",this.game.player.targetX, this.game.player.targetY);
-		this.game.pXY = String.format("%f , %f",this.game.player.posX, this.game.player.posY);
-		this.game.font.draw(this.game.batch, this.game.time, 0, 500);
-		this.game.font.draw(this.game.batch, this.game.cXY, 0, 485);
-		this.game.font.draw(this.game.batch, this.game.tXY, 0, 470);
-		this.game.font.draw(this.game.batch, this.game.pXY, 0, 455);
-		this.game.batch.end();
+		time = String.format("%f",this.game.elapsedTime);
+		cXY = String.format("%f , %f",player.getTileX(),player.getTileY());
+		tXY = String.format("%d , %d",player.targetX, player.targetY);
+		pXY = String.format("%f , %f",player.posX, player.posY);
+		font.draw(batch, time, 0, 500);
+		font.draw(batch, cXY, 0, 485);
+		font.draw(batch, tXY, 0, 470);
+		font.draw(batch, pXY, 0, 455);
+		batch.setProjectionMatrix(playcam.combined);
+		batch.end();
 	        
 			
 		}
+	public void dispose () {
+		batch.dispose();
+		textureAtlas.dispose();
+		
+	}
 	@Override
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.F1) {
-			System.out.println(this.game.player.isMovingRight);
+			System.out.println(player.isMovingRight);
 		}
 		if(keycode == Keys.LEFT) {
-			this.game.player.isMovingLeft = true;
+			player.isMovingLeft = true;
 		}
 		if(keycode == Keys.RIGHT) {
-			this.game.player.isMovingRight = true;
+			player.isMovingRight = true;
 		}
 		if(keycode == Keys.DOWN) {
-			this.game.player.isMovingDown = true;
+			player.isMovingDown = true;
 		}
 		if(keycode == Keys.UP) {
-			this.game.player.isMovingUp = true;
+			player.isMovingUp = true;
 		}
 		return true;
 	}
 	@Override
 	public boolean keyUp(int keycode) {
 		if(keycode == Keys.LEFT) {
-			this.game.player.isMovingLeft = false;
+			player.isMovingLeft = false;
 	}
 		if(keycode == Keys.RIGHT) {
-			this.game.player.isMovingRight = false;
+			player.isMovingRight = false;
 	}
 		if(keycode == Keys.UP) {
-			this.game.player.isMovingUp = false;
+			player.isMovingUp = false;
 	}
 		if(keycode == Keys.DOWN) {
-			this.game.player.isMovingDown = false;
+			player.isMovingDown = false;
 	}
 		return true;
 	}

@@ -13,7 +13,7 @@ public class MapaBlocos {
 		this.gridBlocos = new Bloco[w][h];
 		for(int i = 0; i < w; i++) {
 			for(int j = 0; j < h; j++) {
-				gridBlocos[i][j] = new Bloco(i,j);
+				gridBlocos[i][j] = new Bloco(i,j,true);
 			}
 		}
 	}

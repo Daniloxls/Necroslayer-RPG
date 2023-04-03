@@ -27,25 +27,23 @@ public class Necroslayer extends Game implements ApplicationListener{
 	public Animation<Sprite> walkAnimation;
 	public float elapsedTime = 0;
 	float unitScale = 1 / 16f;
-	final int GAME_WORLD_HEIGHT = 576;
-	final int GAME_WORLD_WIDTH = 1024;
+	public final int GAME_WORLD_HEIGHT = 576;
+	public final int GAME_WORLD_WIDTH = 1024;
 	public FitViewport viewport;
 	public Player player;
-	public Sprite spriteanda;
-	public BitmapFont font;
+	
+	
     public OrthographicCamera camera;
 	// Debug Info
-    public String time, cXY, tXY, pXY;
-	int initX = 0, initY = 0;
+    
+	int initX = 8, initY = 4;
 	@Override
 	public void create () {
-		font  = new BitmapFont();
+		
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
-		tiledMap = new TmxMapLoader().load("mapa_3.tmx");
+		tiledMap = new TmxMapLoader().load("mapa_4.tmx");
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
-		player = new Player(initX, initY);
-		walkAnimation = player.currentAnimation;
 		camera = new OrthographicCamera();
 		camera.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, camera);

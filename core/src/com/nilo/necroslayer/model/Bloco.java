@@ -4,11 +4,12 @@ public class Bloco {
 	private int x,y;
 	private float pixelX,pixelY;
 	private BlocoItem item = new BlocoItem();
-	public boolean isWalkable = true;
+	public boolean isWalkable;
 	private boolean haveAPlayer = false;
-	public Bloco (int x, int y){
+	public Bloco (int x, int y, boolean walk){
 		this.x = x;
 		this.y = y;
+		this.isWalkable = true;
 
 	}
 	public int getx() {
