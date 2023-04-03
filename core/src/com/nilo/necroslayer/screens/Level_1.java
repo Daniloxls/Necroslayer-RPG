@@ -53,7 +53,7 @@ public class Level_1 extends ScreenAdapter implements InputProcessor{
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		Gdx.input.setInputProcessor(this);
 		
-		level_1 = new MapaBlocos(20,16);
+		level_1 = new MapaBlocos(40,30);
 		level_1.gridBlocos[5][10].isWalkable = false;
 		level_1.gridBlocos[5][11].isWalkable = false;
 		level_1.gridBlocos[5][12].isWalkable = false;
@@ -63,7 +63,7 @@ public class Level_1 extends ScreenAdapter implements InputProcessor{
 		level_1.gridBlocos[7][10].isWalkable = false;
 		level_1.gridBlocos[7][11].isWalkable = false;
 		level_1.gridBlocos[7][12].isWalkable = false;
-		player = new Player(0, 0);
+		player = new Player(20, 14);
 		playcam = new PlayerCamera(player, level_1);
 		walkAnimation = player.currentAnimation;
 		playcam.update();
@@ -74,7 +74,7 @@ public class Level_1 extends ScreenAdapter implements InputProcessor{
 	@Override
 	public void resize (int width, int height) {
 		viewport.update(width, height);
-		playcam.position.set(GAME_WORLD_WIDTH/2, GAME_WORLD_HEIGHT/2, 0);
+		//playcam.position.set(GAME_WORLD_WIDTH/2, GAME_WORLD_HEIGHT/2, 0);
 	}
 	@Override
 	public void render(float delta) {
