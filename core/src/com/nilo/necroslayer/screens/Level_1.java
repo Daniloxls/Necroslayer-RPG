@@ -118,7 +118,12 @@ public class Level_1 extends ScreenAdapter implements InputProcessor{
 	@Override
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.F1) {
-			System.out.println(player.isMovingRight);
+			player.isMovingLeft = false;
+			player.isMovingRight = false;
+			player.isMovingDown = false;
+			player.isMovingUp = false;
+			Gdx.input.setInputProcessor(null);
+			this.game.setScreen(new MenuScreen(this.game, this.player, this));
 		}
 		if(keycode == Keys.LEFT) {
 			player.isMovingLeft = true;
