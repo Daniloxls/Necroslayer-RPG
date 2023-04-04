@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
+import java.util.ArrayList;
 import java.util.Map;
 public class Player extends Actor {
 	public enum State {
@@ -150,6 +151,34 @@ public class Player extends Actor {
 				this.setAnimation(this.direction);
 			}
 		}
+	public ArrayList<String> interact(MapaBlocos mapa) {
+		Bloco blocofacing;
+		if(this.direction == Direction.LEFT) {
+			blocofacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+		}
+		else if(this.direction == Direction.RIGHT) {
+			blocofacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+		}
+		else if(this.direction == Direction.DOWN) {
+			blocofacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+		}
+		else{
+			blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+		}
+		if (blocofacing.getItem().interactable) {
+			if (blocofacing.getItem().hasDialogue) {
+				blocofacing.getItem().interact();
+				return blocofacing.getItem().dialogue;
+			}
+			else {
+			blocofacing.getItem().interact();
+			return new ArrayList<String>();
+			}
+		}
+		else {
+			return new ArrayList<String>();
+		}
+	}
 	public float getTileX(){
 		return (this.posX)/64;
 	}
