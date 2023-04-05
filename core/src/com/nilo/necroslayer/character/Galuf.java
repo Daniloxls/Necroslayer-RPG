@@ -1,8 +1,12 @@
 package com.nilo.necroslayer.character;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 public class Galuf extends Charac {
-	
-	Galuf(){
+	TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("galuf.atlas"));
+	public Galuf(){
+		
 			this.setLevel(1);
 			this.setMaxHp(37);
 			this.setHp(this.getMaxHp());

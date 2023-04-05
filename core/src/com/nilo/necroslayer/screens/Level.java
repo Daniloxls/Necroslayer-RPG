@@ -132,8 +132,15 @@ public class Level extends ScreenAdapter implements InputProcessor{
 			player.isMovingRight = false;
 			player.isMovingDown = false;
 			player.isMovingUp = false;
-			Gdx.input.setInputProcessor(null);
 			this.game.setScreen(new MenuScreen(this.game, this.player, this));
+		}
+		if(keycode == Keys.F2) {
+			player.isMovingLeft = false;
+			player.isMovingRight = false;
+			player.isMovingDown = false;
+			player.isMovingUp = false;
+			Gdx.input.setInputProcessor(null);
+			this.game.setScreen(new Batalha(this.game, this.player.party, this));
 		}
 		if(keycode == Keys.Z) {
 			if(game.dialogo.getInDialogue()) {

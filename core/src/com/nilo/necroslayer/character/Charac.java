@@ -2,6 +2,7 @@ package com.nilo.necroslayer.character;
 
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.inventory.Weapon;
+import com.nilo.necroslayer.jobs.Job;
 
 public class Charac {
 	private int level;
@@ -25,6 +26,7 @@ public class Charac {
 	private Armor body;
 	private Armor boots;
 	private String status;
+	private Job job;
 	
 	
 	public int getHp() {
@@ -152,6 +154,12 @@ public class Charac {
 	}
 	public void setMaxMp(int maxMp) {
 		this.maxMp = maxMp;
+	}
+	public Job getJob() {
+		return job;
+	}
+	public void setJob(Job job) {
+		this.job = job;
 	}
 	
 

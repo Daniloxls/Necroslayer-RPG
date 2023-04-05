@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Bartz extends Charac{
 	TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
-	Bartz(){
+	public Bartz(){
 		this.setLevel(1);
 		this.setMaxHp(36);
 		this.setHp(this.getMaxHp());

@@ -4,6 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.nilo.necroslayer.character.Bartz;
+import com.nilo.necroslayer.character.Faris;
+import com.nilo.necroslayer.character.Galuf;
+import com.nilo.necroslayer.character.Lenna;
+import com.nilo.necroslayer.character.Party;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -46,7 +51,7 @@ public class Player extends Actor {
 	State state = State.IDLE;
 	Direction direction = Direction.DOWN;
 	Rectangle bounds = new Rectangle();
-	
+	public Party party;
 	public Player(int tileX, int tileY) {
 		this.tileX = tileX;
 		this.tileY = tileY;
@@ -62,7 +67,7 @@ public class Player extends Actor {
 		this.isMovingRight = false;
 		this.isMovingUp = false;
 		this.isMovingDown = false;
-		
+		this.party = new Party(new Bartz(), new Lenna(), new Galuf(), new Faris());
 	}
 	public void setAnimation(Direction direct) {
 		if(direct == Direction.LEFT) {

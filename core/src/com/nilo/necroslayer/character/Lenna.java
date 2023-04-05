@@ -1,8 +1,12 @@
 package com.nilo.necroslayer.character;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 public class Lenna extends Charac {
+	TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("lenna.atlas"));
 	
-	Lenna(){
+	public Lenna(){
 		this.setLevel(1);
 		this.setMaxHp(35);
 		this.setHp(this.getMaxHp());
