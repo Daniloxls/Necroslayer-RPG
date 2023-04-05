@@ -50,7 +50,7 @@ public class Necroslayer extends Game implements ApplicationListener{
 		dialogo = new Dialogue();
 		level_1 = new Level(40,30,"mapa_4.tmx",player, blocos, this);
 		batch = new SpriteBatch();
-		textureAtlas = new TextureAtlas(Gdx.files.internal("bartz.atlas"));
+		textureAtlas = new TextureAtlas(Gdx.files.internal("player.atlas"));
 		tiledMap = new TmxMapLoader().load("mapa_4.tmx");
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		camera = new OrthographicCamera();

@@ -25,7 +25,7 @@ public class Player extends Actor {
 	public boolean isWalking,isMovingLeft, isMovingRight, isMovingUp, isMovingDown;
 	public float posX, posY, tileX, tileY;
 	public int targetX, targetY;
-	TextureAtlas textureAtlas= new TextureAtlas(Gdx.files.internal("bartz.atlas"));;
+	TextureAtlas textureAtlas= new TextureAtlas(Gdx.files.internal("player.atlas"));;
 	public Animation<Sprite> southAnimation = new Animation<Sprite>(0.2f,
             (textureAtlas.createSprite("000")),
             (textureAtlas.createSprite("001")));
@@ -115,35 +115,39 @@ public class Player extends Actor {
 		}
 			if (this.inTarget()) {
 				if(this.isMovingLeft) {
+					this.direction = Direction.LEFT;
 					if(this.targetX >0) {
 						if(mapa.gridBlocos[this.targetX - 1][this.targetY].isWalkable) {
 							this.targetX --;
-							this.direction = Direction.LEFT;
+
 						}
 					}
 				}
 				if(this.isMovingRight) {
+					this.direction = Direction.RIGHT;
 					if(this.targetX < mapa.width-1) {
 						if(mapa.gridBlocos[this.targetX + 1][this.targetY].isWalkable) {
 							this.targetX ++;
-							this.direction = Direction.RIGHT;	
+	
 							}
 						}
 					
 				}
 				if((this.isMovingUp) & !(this.isMovingLeft)& !(this.isMovingRight)) {
+					this.direction = Direction.UP;	
 					if(this.targetY < mapa.height-1) {
 						if(mapa.gridBlocos[this.targetX][this.targetY + 1].isWalkable) {
 							this.targetY ++;
-							this.direction = Direction.UP;	
+
 							}
 						}
 				}
 				if((this.isMovingDown) & !(this.isMovingLeft)& !(this.isMovingRight)) {
+					this.direction = Direction.DOWN;	
 					if(this.targetY > 0) {
 						if(mapa.gridBlocos[this.targetX][this.targetY -1].isWalkable) {
 							this.targetY --;
-							this.direction = Direction.DOWN;	
+
 							}
 						}
 				}
