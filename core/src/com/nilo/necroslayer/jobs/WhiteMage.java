@@ -1,6 +1,9 @@
 package com.nilo.necroslayer.jobs;
 
 public class WhiteMage extends Job{
-	final int ID = 120;
+	
+	public WhiteMage(){
+		this.id = 120;
+	}
 
 }

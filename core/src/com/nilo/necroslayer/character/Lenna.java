@@ -2,10 +2,10 @@ package com.nilo.necroslayer.character;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.nilo.necroslayer.jobs.BlackMage;
+import com.nilo.necroslayer.jobs.WhiteMage;
 
 public class Lenna extends Charac {
-	TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("lenna.atlas"));
-	
 	public Lenna(){
 		this.setLevel(1);
 		this.setMaxHp(35);
@@ -21,6 +21,8 @@ public class Lenna extends Charac {
 		this.setEvade(0);
 		this.setMdef(1);
 		this.setMevade(0);
+		this.setSprites(new TextureAtlas(Gdx.files.internal("lenna.atlas")));
+		this.setJob(new BlackMage());
 	}
 
 }

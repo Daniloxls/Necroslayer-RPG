@@ -28,8 +28,6 @@ public class Necroslayer extends Game implements ApplicationListener{
 	public Texture texture;
 	public Sprite sprite, caixaDialogo;
 	public TextureAtlas textureAtlas;
-	public Animation<Sprite> animation, southAnimation, northAnimation ,eastAnimation ,westAnimation;
-	public Animation<Sprite> walkAnimation;
 	public Dialogue dialogo;
 	public float elapsedTime = 0;
 	float unitScale = 1 / 16f;
