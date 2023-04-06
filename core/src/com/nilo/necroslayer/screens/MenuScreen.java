@@ -17,11 +17,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
+import com.nilo.necroslayer.inventory.Item;
 import com.nilo.necroslayer.model.Menu;
 import com.nilo.necroslayer.model.MenuTab;
 import com.nilo.necroslayer.model.Player;
 
-public class MenuScreen extends ScreenAdapter{
+public class MenuScreen extends ScreenAdapter implements InputProcessor{
     Sprite background;
     Texture texture;
     Player player;
@@ -34,12 +35,16 @@ public class MenuScreen extends ScreenAdapter{
     Sprite maozinha;
     Menu menu;
     public BitmapFont font;
-    
-    public MenuScreen(Necroslayer game, Player player, ScreenAdapter lastScreen) {
+    boolean showInfos;
+    public enum Infos {
+		  PARTY, BACKPACK, OPTIONS, SKILLS, MAP
+		 }
+    public MenuScreen(Necroslayer game, Player player, ScreenAdapter lastScreen){
         this.player = player;
         this.game = game;
         this.lastScreen = lastScreen;
         this.menu = new Menu();
+        this.showInfos = false;
     }
     
     @Override
@@ -57,18 +62,7 @@ public class MenuScreen extends ScreenAdapter{
 		batch = new SpriteBatch();
 		menuView = new FitViewport(this.game.GAME_WORLD_WIDTH, this.game.GAME_WORLD_HEIGHT, camera);
 		menuView.apply();
-		Gdx.input.setInputProcessor(new InputAdapter() {
-			@Override
-			public boolean keyDown(int keycode) {
-				if(keycode == Keys.UP) {
-					menu.menuUp();
-				}
-				if(keycode == Keys.DOWN) {
-					menu.menuDown();
-				}
-				return true;
-			}
-        });
+		Gdx.input.setInputProcessor(this);
 		
     }
     @Override
@@ -91,6 +85,16 @@ public class MenuScreen extends ScreenAdapter{
         		batch.draw(maozinha, this.game.GAME_WORLD_WIDTH * 0.7f + 75f, (this.game.GAME_WORLD_HEIGHT - 80f) - (i * 70f), 0, 0, 16, 16, 3, 3, 0);
         	}
         }
+        switch(menu.getSelectedMenu().getTipo()) {
+        case PARTY:
+        	break;
+        case BACKPACK:
+        	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
+        	for(int i = 0; i < this.player.mochila.getItems().size(); i++) {
+        		font.draw(batch, this.player.mochila.getItems().get(i).getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 20 * i));
+        		font.draw(batch, this.player.mochila.getItems().get(i).getDesc(), 50, this.game.GAME_WORLD_HEIGHT - (130 + 20 * i));
+        	}
+        }        
         batch.end();
     }
 	public void dispose () {
@@ -100,5 +104,61 @@ public class MenuScreen extends ScreenAdapter{
     @Override
     public void hide(){
         Gdx.input.setInputProcessor(null);
-    }    
+    }
+
+	@Override
+	public boolean keyDown(int keycode) {
+		if(keycode == Keys.BACKSPACE) {
+			this.game.setScreen(lastScreen);
+		}
+		if(keycode == Keys.UP) {
+			menu.menuUp();
+		}
+		if(keycode == Keys.DOWN) {
+			menu.menuDown();
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		// TODO Auto-generated method stub
+		return false;
+	}    
 }
