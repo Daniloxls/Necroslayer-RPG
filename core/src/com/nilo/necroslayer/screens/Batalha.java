@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,7 +30,8 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     Texture handTexture;
     Sprite maozinha;
     public BitmapFont font;
-    
+    Animation<Sprite> bartzAnimation,lennaAnimation,galufAnimation,farisAnimation;
+    Sprite bartzCurrentSprite,lennaCurrentSprite,galufCurrentSprite,farisCurrentSprite;
     public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen) {
         this.party = party;
         this.game = game;
@@ -44,6 +46,10 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
 		maozinha = new Sprite(handTexture, 16, 16);
 		camera = new OrthographicCamera();
+		bartzAnimation = this.party.bartz.getAnimation();
+		lennaAnimation = this.party.lenna.getAnimation();
+		galufAnimation = this.party.galuf.getAnimation();
+		farisAnimation = this.party.faris.getAnimation();
 		camera.position.set(this.game.GAME_WORLD_WIDTH/2, this.game.GAME_WORLD_HEIGHT/2, 0);
 		camera.update();
 		batch = new SpriteBatch();
@@ -62,10 +68,23 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
+        
         batch.begin();
+        bartzCurrentSprite = (Sprite)bartzAnimation.getKeyFrame(this.game.elapsedTime);
+        lennaCurrentSprite = (Sprite)lennaAnimation.getKeyFrame(this.game.elapsedTime);
+        galufCurrentSprite = (Sprite)galufAnimation.getKeyFrame(this.game.elapsedTime);
+        farisCurrentSprite = (Sprite)farisAnimation.getKeyFrame(this.game.elapsedTime);
         batch.setProjectionMatrix(camera.combined);
         //batch.draw(background, camera.position.x - background.getWidth()/2,camera.position.y - background.getHeight()/2);
         batch.draw(background, 0,  0, 0, 0, 256, 144, 4, 4, 0);
+        batch.draw(bartzCurrentSprite, 768, 318, 0, 0, 30, 30,
+	    		4, 4, 0);
+        batch.draw(lennaCurrentSprite, 768, 218, 0, 0, 30, 30,
+	    		4, 4, 0);
+        batch.draw(galufCurrentSprite, 768, 118, 0, 0, 30, 30,
+	    		4, 4, 0);
+        batch.draw(farisCurrentSprite, 768, 18, 0, 0, 30, 30,
+	    		4, 4, 0);
         batch.end();
     }
     @Override

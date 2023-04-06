@@ -37,7 +37,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	Viewport viewport;
 	Player player;
 	Sprite spriteanda;
-	public Animation<Sprite> walkAnimation;
+	public Animation<Sprite> walkAnimation, testAnimation;
 	public OrthogonalTiledMapRenderer tMR;
 	public TiledMap tiledMap;
 	public Texture texture;

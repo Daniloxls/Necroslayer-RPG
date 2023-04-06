@@ -1,6 +1,9 @@
 package com.nilo.necroslayer.jobs;
 
 public class Thief extends Job{
-	final int ID = 36;
+
+	public Thief(){
+		this.id = 48;
+	}
 
 }

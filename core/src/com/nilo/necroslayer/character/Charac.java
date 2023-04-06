@@ -1,5 +1,8 @@
 package com.nilo.necroslayer.character;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.jobs.Job;
@@ -27,7 +30,7 @@ public class Charac {
 	private Armor boots;
 	private String status;
 	private Job job;
-	
+	private TextureAtlas sprites;
 	
 	public int getHp() {
 		return hp;
@@ -160,6 +163,54 @@ public class Charac {
 	}
 	public void setJob(Job job) {
 		this.job = job;
+	}
+	
+	public Animation<Sprite> getAnimation(){
+		if(this.getJob().id < 100) {
+		Animation<Sprite> currentAnimation = new Animation<Sprite>(0.2f,
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+1))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+2))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+3))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+4))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+5))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+6))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+7))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+8))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+9))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+10))),
+				(sprites.createSprite(("00011")))
+				);
+			System.out.println(("000")+Integer.toString(this.getJob().id));
+			System.out.println("SpriteCarregado");
+			return currentAnimation;
+		}
+		else  {
+			Animation<Sprite> currentAnimation = new Animation<Sprite>(0.2f,
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+1))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+2))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+3))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+4))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+5))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+6))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+7))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+8))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+9))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+10))),
+					(sprites.createSprite(("00011")))
+					);
+				System.out.println(("00")+Integer.toString(this.getJob().id));
+				System.out.println("SpriteCarregado");
+				return currentAnimation;
+			}
+		
+	}
+	public TextureAtlas getSprites() {
+		return sprites;
+	}
+	public void setSprites(TextureAtlas sprites) {
+		this.sprites = sprites;
 	}
 	
 
