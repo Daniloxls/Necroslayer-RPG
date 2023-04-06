@@ -46,8 +46,4 @@ public class Menu {
 		}
 	}
 	
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> inicio menu pages

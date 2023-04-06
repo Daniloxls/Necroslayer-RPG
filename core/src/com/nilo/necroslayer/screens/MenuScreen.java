@@ -93,13 +93,10 @@ public class MenuScreen extends ScreenAdapter{
         }
         batch.end();
     }
-<<<<<<< HEAD
 	public void dispose () {
 		batch.dispose();
 		
 	}
-=======
->>>>>>> inicio menu pages
     @Override
     public void hide(){
         Gdx.input.setInputProcessor(null);

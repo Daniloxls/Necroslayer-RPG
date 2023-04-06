@@ -132,15 +132,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 			player.isMovingRight = false;
 			player.isMovingDown = false;
 			player.isMovingUp = false;
-<<<<<<< HEAD:core/src/com/nilo/necroslayer/screens/Level.java
 			this.game.setScreen(new MenuScreen(this.game, this.player, this));
-=======
-			Gdx.input.setInputProcessor(null);
-			this.game.setScreen(new MenuScreen(this.game, this.player, this));
-		}
-		if(keycode == Keys.LEFT) {
-			player.isMovingLeft = true;
->>>>>>> inicio menu pages:core/src/com/nilo/necroslayer/screens/Level_1.java
 		}
 		if(keycode == Keys.F2) {
 			player.isMovingLeft = false;
