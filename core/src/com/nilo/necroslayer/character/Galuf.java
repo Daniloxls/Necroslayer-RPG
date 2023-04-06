@@ -23,7 +23,7 @@ public class Galuf extends Charac {
 			this.setMdef(1);
 			this.setMevade(0);
 			this.setSprites(new TextureAtlas(Gdx.files.internal("galuf.atlas")));
-			this.setJob(new WhiteMage());
+			this.setJob(new BlackMage());
 	}
 
 }

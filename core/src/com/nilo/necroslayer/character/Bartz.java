@@ -25,7 +25,7 @@ public class Bartz extends Charac{
 		this.setMdef(1);
 		this.setMevade(0);
 		this.setSprites(new TextureAtlas(Gdx.files.internal("bartz.atlas")));
-		this.setJob(new Thief());
+		this.setJob(new BlackMage());
 	}
 	//@Override
 	/*public Animation<Sprite> getAnimation(){
