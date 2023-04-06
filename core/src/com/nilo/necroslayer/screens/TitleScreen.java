@@ -18,6 +18,7 @@ public class TitleScreen extends ScreenAdapter {
     Sprite background;
     Texture texture;
     Viewport titleView;
+    Level level;
     public TitleScreen(Necroslayer game) {
         this.game = game;
     }
@@ -32,7 +33,7 @@ public class TitleScreen extends ScreenAdapter {
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.SPACE) {
-                    game.setScreen(new Level_1(game));
+                    game.setScreen(game.level_1);
                 }
                 return true;
             }
@@ -57,4 +58,3 @@ public class TitleScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(null);
     }
 }
-

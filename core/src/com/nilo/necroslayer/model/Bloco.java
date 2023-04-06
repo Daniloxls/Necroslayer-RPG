@@ -2,15 +2,18 @@ package com.nilo.necroslayer.model;
 
 public class Bloco {
 	private int x,y;
-	private float pixelX,pixelY;
 	private BlocoItem item = new BlocoItem();
 	public boolean isWalkable;
-	private boolean haveAPlayer = false;
 	public Bloco (int x, int y, boolean walk){
 		this.x = x;
 		this.y = y;
 		this.isWalkable = true;
-
+	}
+	public Bloco(int x, int y, boolean walk, BlocoItem item) {
+		this.x = x;
+		this.y = y;
+		this.isWalkable = true;
+		this.item = item;
 	}
 	public int getx() {
 		return this.x;
@@ -30,11 +33,6 @@ public class Bloco {
 	public void setWalkable(boolean isWalkable) {
 		this.isWalkable = isWalkable;
 	}
-	public boolean isHaveAPlayer() {
-		return haveAPlayer;
-	}
-	public void setHaveAPlayer(boolean haveAPlayer) {
-		this.haveAPlayer = haveAPlayer;
-	}
+
 
 }
