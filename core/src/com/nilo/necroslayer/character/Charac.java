@@ -1,7 +1,9 @@
 package com.nilo.necroslayer.character;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.inventory.Weapon;
@@ -31,6 +33,7 @@ public class Charac {
 	private String status;
 	private Job job;
 	private TextureAtlas sprites;
+	public String ablityName;
 	
 	public int getHp() {
 		return hp;
@@ -212,6 +215,10 @@ public class Charac {
 	public void setSprites(TextureAtlas sprites) {
 		this.sprites = sprites;
 	}
-	
+	public void showOptions(SpriteBatch batch , BitmapFont font) {
+		font.draw(batch,"Attack" , 356, 112);
+        font.draw(batch,this.job.abilityName , 356, 88);
+        font.draw(batch,"Item" , 356, 64);
+	}
 
 }
