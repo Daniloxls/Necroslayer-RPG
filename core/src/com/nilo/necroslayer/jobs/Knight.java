@@ -4,5 +4,6 @@ public class Knight extends Job{
 
 	public Knight(){
 		this.id=12;
+		this.abilityName = "Defender";
 	}
 }

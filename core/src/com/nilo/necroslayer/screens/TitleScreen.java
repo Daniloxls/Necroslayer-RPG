@@ -57,4 +57,10 @@ public class TitleScreen extends ScreenAdapter {
     public void hide(){
         Gdx.input.setInputProcessor(null);
     }
+    @Override
+    public void dispose () {
+		game.batch.dispose();
+		
+	}
 }
+

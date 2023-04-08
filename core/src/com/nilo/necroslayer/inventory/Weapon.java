@@ -1,11 +1,45 @@
 package com.nilo.necroslayer.inventory;
 
 public class Weapon extends Item{
-
-	public Weapon(String name, String desc) {
-		super(name, desc);
-	}
+	private int maxDamage;
+	private int minDamage;
+	private String name;
 	
+	public Weapon(String name, String desc, int max, int min) {
+		super(name, desc);
+		this.setMaxDamage(max);
+		this.setMinDamage(min);
+	}
+
+
+	public int getMaxDamage() {
+		return maxDamage;
+	}
+
+
+	public void setMaxDamage(int maxDamage) {
+		this.maxDamage = maxDamage;
+	}
+
+
+	public int getMinDamage() {
+		return minDamage;
+	}
+
+
+	public void setMinDamage(int minDamage) {
+		this.minDamage = minDamage;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 
 }

@@ -6,6 +6,6 @@ public class Job {
 	int agilBonus;
 	int vitBonus;
 	int magBonus;
-
+	public String abilityName;
 	
 }

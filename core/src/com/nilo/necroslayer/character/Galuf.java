@@ -3,6 +3,7 @@ package com.nilo.necroslayer.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.nilo.necroslayer.jobs.BlackMage;
+import com.nilo.necroslayer.jobs.Knight;
 import com.nilo.necroslayer.jobs.WhiteMage;
 
 public class Galuf extends Charac {
@@ -23,7 +24,7 @@ public class Galuf extends Charac {
 			this.setMdef(1);
 			this.setMevade(0);
 			this.setSprites(new TextureAtlas(Gdx.files.internal("galuf.atlas")));
-			this.setJob(new BlackMage());
+			this.setJob(new Knight());
 	}
 
 }
