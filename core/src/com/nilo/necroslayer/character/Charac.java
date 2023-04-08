@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.nilo.necroslayer.enemy.Enemy;
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.jobs.Job;
+import java.util.Random;
 
 public class Charac {
 	private int level;
@@ -34,7 +36,7 @@ public class Charac {
 	private Job job;
 	private TextureAtlas sprites;
 	public String ablityName;
-	
+	Random generator = new Random();
 	public int getHp() {
 		return hp;
 	}
@@ -219,6 +221,12 @@ public class Charac {
 		font.draw(batch,"Attack" , 356, 112);
         font.draw(batch,this.job.abilityName , 356, 88);
         font.draw(batch,"Item" , 356, 64);
+	}
+	public void atacar(Enemy enemy) {
+		int dano;
+		dano = (int)this.getStrenght()/4;
+		dano += generator.nextInt((this.getrHand().getMaxDamage() - this.getrHand().getMinDamage())+1) + this.getrHand().getMinDamage();
+		enemy.setHp(enemy.getHp()-dano); 
 	}
 
 }

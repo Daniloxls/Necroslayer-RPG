@@ -141,6 +141,8 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		}
 		if(keycode == Keys.Z) {
 			if(bartzChoosing) {
+				this.party.bartz.atacar(this.enemy);
+				System.out.println(enemy.getHp());
 				bartzChoosing = false;
 			}else if(lennaChoosing) {
 				lennaChoosing = false;
@@ -217,4 +219,5 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		    		3, 3, 0);
 		}
 	}
+
 }
