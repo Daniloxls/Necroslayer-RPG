@@ -11,6 +11,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -49,8 +50,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
     
     @Override
     public void show() {
-    	font = new BitmapFont();
-        font.getData().setScale(1.5f);
+    	font  = new BitmapFont(Gdx.files.internal("finalfont.fnt"), Gdx.files.internal("finalfont.png") , false, true);
 		texture = new Texture(Gdx.files.internal("menu.png"));
 		background = new Sprite(texture,256,144);
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
@@ -87,6 +87,35 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         }
         switch(menu.getSelectedMenu().getTipo()) {
         case PARTY:
+        	Sprite bartz = (Sprite)player.party.bartz.getAnimation().getKeyFrame(game.elapsedTime);
+        	Sprite lenna = (Sprite)player.party.lenna.getAnimation().getKeyFrame(game.elapsedTime);
+        	Sprite faris = (Sprite)player.party.faris.getAnimation().getKeyFrame(game.elapsedTime);
+        	Sprite galuf = (Sprite)player.party.galuf.getAnimation().getKeyFrame(game.elapsedTime);
+        	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
+        	font.draw(batch,"Bartz", 50, 483);
+        	batch.draw(bartz, 50, 380, 0, 0, 30, 30,3, 3, 0);
+        	font.draw(batch,"Lenna", 50, 383);
+        	batch.draw(lenna, 50, 280, 0, 0, 30, 30,3, 3, 0);
+        	font.draw(batch,"Faris", 50, 283);
+        	batch.draw(faris, 50, 180, 0, 0, 30, 30,3, 3, 0);
+        	font.draw(batch,"Galuf", 50, 183);
+        	batch.draw(galuf, 50, 80, 0, 0, 30, 30,3, 3, 0);
+        	// infos
+        	font.draw(batch, "HP:" + String.valueOf(player.party.bartz.getHp())+ "/" + String.valueOf(player.party.bartz.getMaxHp()), 130, 450);
+        	font.draw(batch, "MP:" + String.valueOf(player.party.bartz.getMp()) + "/" + String.valueOf(player.party.bartz.getMaxMp()), 130, 420);
+        	font.draw(batch, "LVL:" + String.valueOf(player.party.bartz.getLevel()), 250, 450);
+        	//
+        	font.draw(batch, "HP:" + String.valueOf(player.party.lenna.getHp())+ "/" + String.valueOf(player.party.lenna.getMaxHp()), 130, 350);
+        	font.draw(batch, "MP:" + String.valueOf(player.party.lenna.getMp()) + "/" + String.valueOf(player.party.lenna.getMaxMp()), 130, 320);
+        	font.draw(batch, "LVL:" + String.valueOf(player.party.lenna.getLevel()), 250, 350);
+        	//
+        	font.draw(batch, "HP:" + String.valueOf(player.party.faris.getHp())+ "/" + String.valueOf(player.party.faris.getMaxHp()), 130, 250);
+        	font.draw(batch, "MP:" + String.valueOf(player.party.faris.getMp()) + "/" + String.valueOf(player.party.faris.getMaxMp()), 130, 220);
+        	font.draw(batch, "LVL:" + String.valueOf(player.party.faris.getLevel()), 250, 250);
+        	//
+        	font.draw(batch, "HP:" + String.valueOf(player.party.galuf.getHp())+ "/" + String.valueOf(player.party.galuf.getMaxHp()), 130, 150);
+        	font.draw(batch, "MP:" + String.valueOf(player.party.galuf.getMp()) + "/" + String.valueOf(player.party.galuf.getMaxMp()), 130, 120);
+        	font.draw(batch, "LVL:" + String.valueOf(player.party.galuf.getLevel()), 250, 150);
         	break;
         case BACKPACK:
         	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
@@ -94,7 +123,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         		font.draw(batch, this.player.mochila.getItems().get(i).getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 20 * i));
         		font.draw(batch, this.player.mochila.getItems().get(i).getDesc(), 50, this.game.GAME_WORLD_HEIGHT - (130 + 20 * i));
         	}
-        }        
+         }        
         batch.end();
     }
 	public void dispose () {
