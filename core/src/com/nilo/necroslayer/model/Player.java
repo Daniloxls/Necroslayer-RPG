@@ -67,7 +67,7 @@ public class Player extends Actor {
 		this.isMovingRight = false;
 		this.isMovingUp = false;
 		this.isMovingDown = false;
-		this.party = new Party(new Bartz(), new Lenna(), new Galuf(), new Faris());
+		this.party = new Party();
 	}
 	public void setAnimation(Direction direct) {
 		if(direct == Direction.LEFT) {

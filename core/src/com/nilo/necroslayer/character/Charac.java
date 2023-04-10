@@ -35,7 +35,9 @@ public class Charac {
 	private String status;
 	private Job job;
 	private TextureAtlas sprites;
-	public String ablityName;
+	private String ablityName;
+	private String name;
+	private boolean choosing;
 	Random generator = new Random();
 	public int getHp() {
 		return hp;
@@ -186,8 +188,6 @@ public class Charac {
 				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+10))),
 				(sprites.createSprite(("00011")))
 				);
-			System.out.println(("000")+Integer.toString(this.getJob().id));
-			System.out.println("SpriteCarregado");
 			return currentAnimation;
 		}
 		else  {
@@ -205,11 +205,12 @@ public class Charac {
 					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+10))),
 					(sprites.createSprite(("00011")))
 					);
-				System.out.println(("00")+Integer.toString(this.getJob().id));
-				System.out.println("SpriteCarregado");
 				return currentAnimation;
 			}
 		
+	}
+	public Sprite getSprite(float n) {
+		return this.getAnimation().getKeyFrame(n);
 	}
 	public TextureAtlas getSprites() {
 		return sprites;
@@ -227,6 +228,24 @@ public class Charac {
 		dano = (int)this.getStrenght()/4;
 		dano += generator.nextInt((this.getrHand().getMaxDamage() - this.getrHand().getMinDamage())+1) + this.getrHand().getMinDamage();
 		enemy.setHp(enemy.getHp()-dano); 
+	}
+	public String getAblityName() {
+		return ablityName;
+	}
+	public void setAblityName(String ablityName) {
+		this.ablityName = ablityName;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public boolean isChoosing() {
+		return choosing;
+	}
+	public void setChoosing(boolean choosing) {
+		this.choosing = choosing;
 	}
 
 }
