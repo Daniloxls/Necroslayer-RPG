@@ -69,7 +69,7 @@ public class Player extends Actor {
 		this.isMovingRight = false;
 		this.isMovingUp = false;
 		this.isMovingDown = false;
-		this.party = new Party(new Bartz(), new Lenna(), new Galuf(), new Faris());
+		this.party = new Party();
 	}
 	public void setAnimation(Direction direct) {
 		if(direct == Direction.LEFT) {
@@ -162,22 +162,43 @@ public class Player extends Actor {
 				this.setAnimation(this.direction);
 			}
 		}
+	
 	public ArrayList<String> interact(MapaBlocos mapa) {
 		Bloco blocofacing;
 		if(this.direction == Direction.LEFT) {
-			blocofacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+			if(this.targetX == 0) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+			}
 		}
 		else if(this.direction == Direction.RIGHT) {
-			blocofacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+			if(this.targetX == mapa.width-1) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+			}
 		}
 		else if(this.direction == Direction.DOWN) {
-			blocofacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+			if(this.targetY == 0) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+			}
 		}
 		else{
-			blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+			if(this.targetY == mapa.height-1) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+			}
 		}
-		if (blocofacing.getItem().interactable) {
-			if (blocofacing.getItem().hasDialogue) {
+		if (blocofacing.getItem().isInteractable()) {
+			if (blocofacing.getItem().isHasDialogue()) {
 				blocofacing.getItem().interact(this);
 				return blocofacing.getItem().dialogue;
 			}

@@ -28,6 +28,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.enemy.Enemy;
+import com.nilo.necroslayer.inventory.Weapon;
+import com.nilo.necroslayer.model.Bau;
 import com.nilo.necroslayer.model.Bloco;
 import com.nilo.necroslayer.model.MapaBlocos;
 import com.nilo.necroslayer.model.Player;
@@ -63,15 +65,8 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		playcam.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
 		viewport.apply();
-		mapa.gridBlocos[5][3].getItem().hasDialogue = true;
-		mapa.gridBlocos[5][3].getItem().interactable = true;
-		mapa.gridBlocos[5][3].getItem().setItem(new Armor("Armadura PICA", "Uma armadura mt pica mt pica msm"));
-		ArrayList<String> texto = new ArrayList<String>();
-		texto.add("A");
-		texto.add("B");
-		texto.add("ASDUAHSUD");
-		mapa.gridBlocos[5][3].getItem().dialogue = texto;
-		mapa.gridBlocos[5][3].isWalkable = false;
+		mapa.gridBlocos[1][1].setItem(new Bau(new Weapon("Teste", "A espada mais pica", 6, 8)));
+
 	}
 	@Override
 	public void show() {
@@ -96,11 +91,11 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		
 		batch.begin();
 		if(player.isWalking) {
-			this.game.elapsedTime += 0.08;
+			this.game.elapsedTime += 0.025f;
 		}
 		player.walk(mapa);
-		if(this.game.elapsedTime > 1) {
-			this.game.elapsedTime = 0;
+		if(this.game.elapsedTime > 0.4f) {
+			this.game.elapsedTime = 0.0f;
 		}
 		
 		playcam.update();
@@ -108,7 +103,9 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		spriteanda = (Sprite)player.currentAnimation.getKeyFrame(this.game.elapsedTime);
 		batch.draw(spriteanda, player.posX, player.posY, 0, 0, 16, 16,
 		    		4, 4, 0);
+		mapa.renderItems(batch);
 		game.dialogo.render(playcam, batch);
+		
 		time = String.format("%f",this.game.elapsedTime);
 		cXY = String.format("%f , %f",player.getTileX(),player.getTileY());
 		tXY = String.format("%d , %d",player.targetX, player.targetY);
@@ -152,6 +149,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 			else {
 				game.dialogo.setDialogue(player.interact(mapa));
 			}
+			
 		}
 		if(!game.dialogo.getInDialogue()) {
 			if(keycode == Keys.LEFT) {

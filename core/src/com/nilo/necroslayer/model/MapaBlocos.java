@@ -1,5 +1,6 @@
 package com.nilo.necroslayer.model;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nilo.necroslayer.model.Player.Direction;
 
 public class MapaBlocos {
@@ -17,4 +18,14 @@ public class MapaBlocos {
 			}
 		}
 	}
+	public void renderItems(SpriteBatch batch) {
+		for(int i = 0; i < this.width; i++) {
+			for(int j = 0; j < this.height; j++) {
+				if(this.gridBlocos[i][j].getItem().isHasSprite()) {
+					this.gridBlocos[i][j].getItem().render(batch, i*64,j*64);
+				}
+			}
+		}
+	}
+	
 }

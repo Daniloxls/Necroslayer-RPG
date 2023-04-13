@@ -10,6 +10,7 @@ public class Galuf extends Charac {
 	public Galuf(){
 		
 			this.setLevel(1);
+			this.setName("Galuf");
 			this.setMaxHp(37);
 			this.setHp(this.getMaxHp());
 			this.setMaxMp(5);
