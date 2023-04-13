@@ -162,6 +162,7 @@ public class Player extends Actor {
 				this.setAnimation(this.direction);
 			}
 		}
+	
 	public ArrayList<String> interact(MapaBlocos mapa) {
 		Bloco blocofacing;
 		if(this.direction == Direction.LEFT) {
@@ -196,13 +197,8 @@ public class Player extends Actor {
 				blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
 			}
 		}
-<<<<<<< HEAD
 		if (blocofacing.getItem().isInteractable()) {
 			if (blocofacing.getItem().isHasDialogue()) {
-=======
-		if (blocofacing.getItem().interactable) {
-			if (blocofacing.getItem().hasDialogue) {
->>>>>>> 503b91cd6b8eb64227702f921b9864f2a4f04991
 				blocofacing.getItem().interact(this);
 				return blocofacing.getItem().dialogue;
 			}
