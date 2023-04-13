@@ -163,24 +163,44 @@ public class Player extends Actor {
 	public ArrayList<String> interact(MapaBlocos mapa) {
 		Bloco blocofacing;
 		if(this.direction == Direction.LEFT) {
-			blocofacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+			if(this.targetX == 0) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+			}
 		}
 		else if(this.direction == Direction.RIGHT) {
-			blocofacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+			if(this.targetX == mapa.width-1) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+			}
 		}
 		else if(this.direction == Direction.DOWN) {
-			blocofacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+			if(this.targetY == 0) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+			}
 		}
 		else{
-			blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+			if(this.targetY == mapa.height-1) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+			}
 		}
-		if (blocofacing.getItem().interactable) {
-			if (blocofacing.getItem().hasDialogue) {
-				blocofacing.getItem().interact();
+		if (blocofacing.getItem().isInteractable()) {
+			if (blocofacing.getItem().isHasDialogue()) {
+				blocofacing.getItem().interact(this);
 				return blocofacing.getItem().dialogue;
 			}
 			else {
-			blocofacing.getItem().interact();
+			blocofacing.getItem().interact(this);
 			return new ArrayList<String>();
 			}
 		}

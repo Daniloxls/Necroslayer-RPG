@@ -26,6 +26,11 @@ public class Bloco {
 	}
 	public void setItem(BlocoItem item) {
 		this.item = item;
+		this.isWalkable = false;
+	}
+	public void removeItem() {
+		this.item = null;
+		this.isWalkable = true;
 	}
 	public boolean isWalkable() {
 		return isWalkable;
@@ -33,6 +38,6 @@ public class Bloco {
 	public void setWalkable(boolean isWalkable) {
 		this.isWalkable = isWalkable;
 	}
-
+	
 
 }
