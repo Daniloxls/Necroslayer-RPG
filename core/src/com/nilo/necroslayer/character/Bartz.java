@@ -29,7 +29,7 @@ public class Bartz extends Charac{
 		this.setMevade(0);
 		this.setSprites(new TextureAtlas(Gdx.files.internal("bartz.atlas")));
 		this.setJob(new Thief());
-		this.setrHand(new Weapon(8,5));
+		this.setrHand(new Weapon("espada", "muito doida", 8,5));
 	}
 
 }

@@ -47,12 +47,14 @@ public class Player extends Actor {
             (textureAtlas.createSprite("000")),
             (textureAtlas.createSprite("001")));
 	public Animation<Sprite> currentAnimation;
+	public Backpack mochila;
 
 	State state = State.IDLE;
 	Direction direction = Direction.DOWN;
 	Rectangle bounds = new Rectangle();
 	public Party party;
 	public Player(int tileX, int tileY) {
+		this.mochila = new Backpack(20);
 		this.tileX = tileX;
 		this.tileY = tileY;
 		this.bounds.height = SIZE;
@@ -194,8 +196,13 @@ public class Player extends Actor {
 				blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
 			}
 		}
+<<<<<<< HEAD
 		if (blocofacing.getItem().isInteractable()) {
 			if (blocofacing.getItem().isHasDialogue()) {
+=======
+		if (blocofacing.getItem().interactable) {
+			if (blocofacing.getItem().hasDialogue) {
+>>>>>>> 503b91cd6b8eb64227702f921b9864f2a4f04991
 				blocofacing.getItem().interact(this);
 				return blocofacing.getItem().dialogue;
 			}
@@ -215,6 +222,3 @@ public class Player extends Actor {
 		return (this.posY)/64;
 	}
 	}
-	
-
-

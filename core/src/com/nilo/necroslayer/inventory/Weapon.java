@@ -5,7 +5,8 @@ public class Weapon extends Item{
 	private int minDamage;
 	private String name;
 	
-	public Weapon(int max, int min) {
+	public Weapon(String name, String desc, int max, int min) {
+		super(name, desc);
 		this.setMaxDamage(max);
 		this.setMinDamage(min);
 	}

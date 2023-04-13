@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
+import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.enemy.Enemy;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.model.Bau;
@@ -64,7 +65,19 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		playcam.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
 		viewport.apply();
+<<<<<<< HEAD
 		mapa.gridBlocos[1][1].setItem(new Bau(new Weapon(6, 8)));
+=======
+		mapa.gridBlocos[5][3].getItem().hasDialogue = true;
+		mapa.gridBlocos[5][3].getItem().interactable = true;
+		mapa.gridBlocos[5][3].getItem().setItem(new Armor("Armadura PICA", "Uma armadura mt pica mt pica msm"));
+		ArrayList<String> texto = new ArrayList<String>();
+		texto.add("A");
+		texto.add("B");
+		texto.add("ASDUAHSUD");
+		mapa.gridBlocos[5][3].getItem().dialogue = texto;
+		mapa.gridBlocos[5][3].isWalkable = false;
+>>>>>>> 503b91cd6b8eb64227702f921b9864f2a4f04991
 	}
 	@Override
 	public void show() {
