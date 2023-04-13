@@ -28,11 +28,9 @@ public class Bau extends BlocoItem{
 	@Override
 	public void interact(Player player) {
 		if(closed) {
-			System.out.println("Abriu");
 			//add item no iventario;
 			this.setSprite(aberto);
 			closed = false;
-			//this.dialogue = new ArrayList<String>();
 		}
 		else {
 			this.dialogue = new ArrayList<String>();
