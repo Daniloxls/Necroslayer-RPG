@@ -6,10 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nilo.necroslayer.inventory.Item;
+import com.nilo.necroslayer.inventory.Weapon;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Bau extends BlocoItem{
-	Item item;
 	Texture textureFechado = new Texture(Gdx.files.internal("bau_fechado.png"));
 	Sprite fechado = new Sprite(textureFechado, 16, 15);
 	Texture textureAberto = new Texture(Gdx.files.internal("bau_aberto.png"));
@@ -22,8 +22,9 @@ public class Bau extends BlocoItem{
 		this.setInteractable(true);
 		this.setSprite(fechado);
 		this.setHasDialogue(true);
+		this.item = item;
 		this.dialogue = new ArrayList<String>();
-		this.dialogue.add("Você recebeu item");
+		this.dialogue.add("Você recebeu " + this.item.getName());
 	}
 	@Override
 	public void interact(Player player) {
@@ -31,6 +32,7 @@ public class Bau extends BlocoItem{
 			//add item no iventario;
 			this.setSprite(aberto);
 			closed = false;
+			player.mochila.addItem(this.item);
 		}
 		else {
 			this.dialogue = new ArrayList<String>();

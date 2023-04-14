@@ -13,21 +13,14 @@ public class Backpack {
 		 this.maxItens = max;
 	}
 	
-	private boolean isFull() {
-		if(mochila.size() < maxItens) return false;
-		else return true;
-	}
 	
 	public ArrayList<Item> getItems() {
 		return this.mochila;
 	}
 	
-	public boolean addItem(Item item) {
-		if(isFull())return false;
-		else {
-			mochila.add(item);
-			return true;
-		}
+	public void addItem(Item item) {
+		mochila.add(item);
+
 	}
 	
 }

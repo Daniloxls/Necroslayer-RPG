@@ -23,8 +23,7 @@ public class BlocoItem {
 		this.item = item;
 	}
 	public void interact(Player player) {
-		System.out.println("Interagiu!");
-		player.mochila.addItem(this.item);
+
 	}
 	public void render(SpriteBatch batch,int x, int y) {
 		batch.draw(sprite, x, y, 0, 0, 16, 16, 4, 4, 0);

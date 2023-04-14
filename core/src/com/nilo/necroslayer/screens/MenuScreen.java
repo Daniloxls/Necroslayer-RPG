@@ -37,21 +37,19 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
     Texture handTexture;
     Sprite maozinha;
     Menu menu;
-    Boolean mostrarMao;
+    Boolean selecionado;
     public BitmapFont font;
     boolean showInfos;
     public enum Infos {
 		  PARTY, BACKPACK, OPTIONS, SKILLS, MAP
 		 }
-    public Infos selecionado;
     public MenuScreen(Necroslayer game, Player player, ScreenAdapter lastScreen){
         this.player = player;
         this.game = game;
         this.lastScreen = lastScreen;
         this.menu = new Menu(player);
         this.showInfos = false;
-        this.selecionado = Infos.PARTY;
-        this.mostrarMao = false;
+        this.selecionado = false;
     }
     
     @Override
@@ -88,7 +86,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         for(int i = 0; i < menu.getMenus().size(); i++) {
         	font.draw(batch, menu.getMenus().get(i).getName(), this.game.GAME_WORLD_WIDTH * 0.7f + 125, (this.game.GAME_WORLD_HEIGHT - 50) - (i * 70));
         	if(menu.getMenus().get(i).isSelected()) {
-        		if(!mostrarMao) {
+        		if(!selecionado) {
         			batch.draw(maozinha, this.game.GAME_WORLD_WIDTH * 0.7f + 75f, (this.game.GAME_WORLD_HEIGHT - 80f) - (i * 70f), 0, 0, 16, 16, 3, 3, 0);
         		}
         		
@@ -116,10 +114,11 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         	break;
         case BACKPACK:
         	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
-        	for(i = 0; i < this.player.mochila.getItems().size(); i++) {
-        		font.draw(batch, this.player.mochila.getItems().get(i).getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 20 * i));
-        		font.draw(batch, this.player.mochila.getItems().get(i).getDesc(), 50, this.game.GAME_WORLD_HEIGHT - (130 + 20 * i));
+        	for(Item it : this.player.mochila.getItems()) {
+        		font.draw(batch, it.getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 20 * this.player.mochila.getItems().indexOf(it)));
+        		font.draw(batch, it.getDesc(), 50, this.game.GAME_WORLD_HEIGHT - (130 + 20 * this.player.mochila.getItems().indexOf(it)));
         	}
+
          }        
         batch.end();
     }
@@ -139,13 +138,13 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
 			this.game.setScreen(lastScreen);
 		}
 		if(keycode == Keys.UP) {
-			if(!selecionadoParty)menu.menuUp();
+			if(!selecionado)menu.menuUp();
 			else {
 				((PartyTab) menu.getSelectedMenu()).upChar();
 			}
 		}
 		if(keycode == Keys.DOWN) {
-			if(!selecionadoParty)menu.menuDown();
+			if(!selecionado)menu.menuDown();
 			else {
 				((PartyTab) menu.getSelectedMenu()).downChar();
 			}

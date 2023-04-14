@@ -3,7 +3,6 @@ package com.nilo.necroslayer.inventory;
 public class Weapon extends Item{
 	private int maxDamage;
 	private int minDamage;
-	private String name;
 	
 	public Weapon(String name, String desc, int max, int min) {
 		super(name, desc);
@@ -31,15 +30,6 @@ public class Weapon extends Item{
 		this.minDamage = minDamage;
 	}
 
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 
 }
