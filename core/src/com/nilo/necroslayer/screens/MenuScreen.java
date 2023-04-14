@@ -18,9 +18,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
+import com.nilo.necroslayer.character.Charac;
 import com.nilo.necroslayer.inventory.Item;
 import com.nilo.necroslayer.model.Menu;
 import com.nilo.necroslayer.model.MenuTab;
+import com.nilo.necroslayer.model.PartyTab;
 import com.nilo.necroslayer.model.Player;
 
 public class MenuScreen extends ScreenAdapter implements InputProcessor{
@@ -35,17 +37,21 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
     Texture handTexture;
     Sprite maozinha;
     Menu menu;
+    Boolean mostrarMao;
     public BitmapFont font;
     boolean showInfos;
     public enum Infos {
 		  PARTY, BACKPACK, OPTIONS, SKILLS, MAP
 		 }
+    public Infos selecionado;
     public MenuScreen(Necroslayer game, Player player, ScreenAdapter lastScreen){
         this.player = player;
         this.game = game;
         this.lastScreen = lastScreen;
-        this.menu = new Menu();
+        this.menu = new Menu(player);
         this.showInfos = false;
+        this.selecionado = Infos.PARTY;
+        this.mostrarMao = false;
     }
     
     @Override
@@ -82,50 +88,42 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         for(int i = 0; i < menu.getMenus().size(); i++) {
         	font.draw(batch, menu.getMenus().get(i).getName(), this.game.GAME_WORLD_WIDTH * 0.7f + 125, (this.game.GAME_WORLD_HEIGHT - 50) - (i * 70));
         	if(menu.getMenus().get(i).isSelected()) {
-        		batch.draw(maozinha, this.game.GAME_WORLD_WIDTH * 0.7f + 75f, (this.game.GAME_WORLD_HEIGHT - 80f) - (i * 70f), 0, 0, 16, 16, 3, 3, 0);
+        		if(!mostrarMao) {
+        			batch.draw(maozinha, this.game.GAME_WORLD_WIDTH * 0.7f + 75f, (this.game.GAME_WORLD_HEIGHT - 80f) - (i * 70f), 0, 0, 16, 16, 3, 3, 0);
+        		}
+        		
         	}
         }
         switch(menu.getSelectedMenu().getTipo()) {
         case PARTY:
-        	Sprite bartz = (Sprite)player.party.bartz.getAnimation().getKeyFrame(game.elapsedTime);
-        	Sprite lenna = (Sprite)player.party.lenna.getAnimation().getKeyFrame(game.elapsedTime);
-        	Sprite faris = (Sprite)player.party.faris.getAnimation().getKeyFrame(game.elapsedTime);
-        	Sprite galuf = (Sprite)player.party.galuf.getAnimation().getKeyFrame(game.elapsedTime);
-        	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
-        	font.draw(batch,"Bartz", 50, 483);
-        	batch.draw(bartz, 50, 380, 0, 0, 30, 30,3, 3, 0);
-        	font.draw(batch,"Lenna", 50, 383);
-        	batch.draw(lenna, 50, 280, 0, 0, 30, 30,3, 3, 0);
-        	font.draw(batch,"Faris", 50, 283);
-        	batch.draw(faris, 50, 180, 0, 0, 30, 30,3, 3, 0);
-        	font.draw(batch,"Galuf", 50, 183);
-        	batch.draw(galuf, 50, 80, 0, 0, 30, 30,3, 3, 0);
-        	// infos
-        	font.draw(batch, "HP:" + String.valueOf(player.party.bartz.getHp())+ "/" + String.valueOf(player.party.bartz.getMaxHp()), 130, 450);
-        	font.draw(batch, "MP:" + String.valueOf(player.party.bartz.getMp()) + "/" + String.valueOf(player.party.bartz.getMaxMp()), 130, 420);
-        	font.draw(batch, "LVL:" + String.valueOf(player.party.bartz.getLevel()), 250, 450);
-        	//
-        	font.draw(batch, "HP:" + String.valueOf(player.party.lenna.getHp())+ "/" + String.valueOf(player.party.lenna.getMaxHp()), 130, 350);
-        	font.draw(batch, "MP:" + String.valueOf(player.party.lenna.getMp()) + "/" + String.valueOf(player.party.lenna.getMaxMp()), 130, 320);
-        	font.draw(batch, "LVL:" + String.valueOf(player.party.lenna.getLevel()), 250, 350);
-        	//
-        	font.draw(batch, "HP:" + String.valueOf(player.party.faris.getHp())+ "/" + String.valueOf(player.party.faris.getMaxHp()), 130, 250);
-        	font.draw(batch, "MP:" + String.valueOf(player.party.faris.getMp()) + "/" + String.valueOf(player.party.faris.getMaxMp()), 130, 220);
-        	font.draw(batch, "LVL:" + String.valueOf(player.party.faris.getLevel()), 250, 250);
-        	//
-        	font.draw(batch, "HP:" + String.valueOf(player.party.galuf.getHp())+ "/" + String.valueOf(player.party.galuf.getMaxHp()), 130, 150);
-        	font.draw(batch, "MP:" + String.valueOf(player.party.galuf.getMp()) + "/" + String.valueOf(player.party.galuf.getMaxMp()), 130, 120);
-        	font.draw(batch, "LVL:" + String.valueOf(player.party.galuf.getLevel()), 250, 150);
+        	int i = 0;
+        	for(Charac c: this.player.party.getComp()) {
+        		font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
+            	font.draw(batch,c.getName(), 50, 483 - (i*100));
+            	batch.draw(c.getSprite(0), 50, 380 - (i*100), 0, 0, 30, 30,3, 3, 0);
+            	int[] pos = {20, 380 - (i*100)};
+            	c.setPosOnPartyTab(pos);
+            	//
+            	font.draw(batch, "HP:" + String.valueOf(c.getHp())+ "/" + String.valueOf(c.getMaxHp()), 130, 450 - (i*100));
+            	font.draw(batch, "MP:" + String.valueOf(c.getMp()) + "/" + String.valueOf(c.getMaxMp()), 130, 420 - (i*100));
+            	font.draw(batch, "LVL:" + String.valueOf(c.getLevel()), 250, 450 - (i*100));
+            	i++;
+        	}
+        	if(selecionado) {
+        		batch.draw(maozinha, ((PartyTab) menu.getSelectedMenu()).getSelected().getPosOnPartyTab()[0], ((PartyTab) menu.getSelectedMenu()).getSelected().getPosOnPartyTab()[1],0, 0, 16, 16, 2, 2, 0);
+        		
+        	}
         	break;
         case BACKPACK:
         	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
-        	for(int i = 0; i < this.player.mochila.getItems().size(); i++) {
+        	for(i = 0; i < this.player.mochila.getItems().size(); i++) {
         		font.draw(batch, this.player.mochila.getItems().get(i).getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 20 * i));
         		font.draw(batch, this.player.mochila.getItems().get(i).getDesc(), 50, this.game.GAME_WORLD_HEIGHT - (130 + 20 * i));
         	}
          }        
         batch.end();
     }
+    
 	public void dispose () {
 		batch.dispose();
 		
@@ -141,10 +139,22 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
 			this.game.setScreen(lastScreen);
 		}
 		if(keycode == Keys.UP) {
-			menu.menuUp();
+			if(!selecionadoParty)menu.menuUp();
+			else {
+				((PartyTab) menu.getSelectedMenu()).upChar();
+			}
 		}
 		if(keycode == Keys.DOWN) {
-			menu.menuDown();
+			if(!selecionadoParty)menu.menuDown();
+			else {
+				((PartyTab) menu.getSelectedMenu()).downChar();
+			}
+		}
+		if(keycode == Keys.Z) {
+			this.selecionado = true;
+		}
+		if(keycode == Keys.X) {
+			this.selecionado = false;
 		}
 		return true;
 	}

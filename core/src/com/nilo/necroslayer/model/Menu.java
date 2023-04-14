@@ -6,14 +6,17 @@ import com.nilo.necroslayer.screens.MenuScreen.Infos;
 
 public class Menu {
 	private ArrayList<MenuTab> menus = new ArrayList<MenuTab>();
-	public Menu () {
-		menus.add(new MenuTab("Grupo", Infos.PARTY));
+	public Menu (Player player) {
+		menus.add(new PartyTab("Grupo", Infos.PARTY, player.party));
 		menus.get(0).setSelected(true);
 		menus.add(new MenuTab("Inventário", Infos.BACKPACK));
 		menus.add(new MenuTab("Habilidades", Infos.SKILLS));
 		menus.add(new MenuTab("Opções", Infos.OPTIONS));
 		menus.add(new MenuTab("Mapa", Infos.MAP));
 	}
+	
+	
+	
 	public ArrayList<MenuTab> getMenus() {
 		return this.menus;
 	}
