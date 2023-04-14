@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.enemy.Enemy;
+import com.nilo.necroslayer.enemy.EnemyGroup;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.model.Bau;
 import com.nilo.necroslayer.model.Bloco;
@@ -140,7 +141,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 			player.isMovingDown = false;
 			player.isMovingUp = false;
 			Gdx.input.setInputProcessor(null);
-			this.game.setScreen(new Batalha(this.game, this.player.party, this, new Enemy()));
+			this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy(),new Enemy(),new Enemy(),new Enemy())));
 		}
 		if(keycode == Keys.Z) {
 			if(game.dialogo.getInDialogue()) {

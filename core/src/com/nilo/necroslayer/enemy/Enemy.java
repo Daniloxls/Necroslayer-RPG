@@ -11,24 +11,28 @@ public class Enemy {
 	private int hp;
 	private int mp;
 	private int evade;
-	public String name;
+	private String name;
 	public ArrayList<Integer> xp, gil;
-	public Sprite sprite;
+	private Sprite sprite;
 	Texture texture;
+	private int x,y;
+	private int sizeX, sizeY;
 	public Enemy(){
 		this.xp = new ArrayList<Integer>();
 		this.gil = new ArrayList<Integer>();
-		this.name = "Morcego";
+		this.setName("Morcego");
 		this.setPower(8);
 		this.setHp(24);
 		this.setMp(0);
 		this.setEvade(0);
+		this.setSizeX(44);
+		this.setSizeY(49);
 		this.xp.add(15);
 		this.xp.add(23);
 		this.gil.add(45);
 		this.gil.add(73);
 		this.texture  = new Texture(Gdx.files.internal("bat.png"));
-		this.sprite = new Sprite(texture, 44, 49);
+		this.setSprite(new Sprite(texture, this.sizeX, this.sizeY));
 	}
 	public int getPower() {
 		return power;
@@ -53,5 +57,41 @@ public class Enemy {
 	}
 	public void setMp(int mp) {
 		this.mp = mp;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public Sprite getSprite() {
+		return sprite;
+	}
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSizeY() {
+		return sizeY;
+	}
+	public void setSizeY(int sizeY) {
+		this.sizeY = sizeY;
+	}
+	public int getSizeX() {
+		return sizeX;
+	}
+	public void setSizeX(int sizeX) {
+		this.sizeX = sizeX;
 	}
 }

@@ -1,5 +1,7 @@
 package com.nilo.necroslayer.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
@@ -17,6 +19,7 @@ import com.nilo.necroslayer.Necroslayer;
 import com.nilo.necroslayer.character.Charac;
 import com.nilo.necroslayer.character.Party;
 import com.nilo.necroslayer.enemy.Enemy;
+import com.nilo.necroslayer.enemy.EnemyGroup;
 import com.nilo.necroslayer.model.Menu;
 import com.nilo.necroslayer.model.Player;
 
@@ -30,15 +33,13 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 	private FitViewport battleView;
     Necroslayer game;
     ScreenAdapter lastScreen;
-    Sprite maozinha;
-    Enemy enemy;
-    Animation<Sprite> bartzAnimation,lennaAnimation,galufAnimation,farisAnimation;
+    Sprite cursorR, cursorL;
+    EnemyGroup enemyGroup;
     int choosingIndex;
-    Sprite bartzCurrentSprite,lennaCurrentSprite,galufCurrentSprite,farisCurrentSprite;
     int choiceIndex;
-    public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen, Enemy enemy) {
+    public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen, EnemyGroup enemyGroup) {
         this.party = party;
-        this.enemy = enemy;
+        this.enemyGroup = enemyGroup;
         this.game = game;
         this.lastScreen = lastScreen;
     }
@@ -47,7 +48,9 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		texture = new Texture(Gdx.files.internal("background_batalha.png"));
 		background = new Sprite(texture,256,144);
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
-		maozinha = new Sprite(handTexture, 16, 16);
+		cursorR = new Sprite(handTexture, 16, 16);
+		cursorL = new Sprite(handTexture, 16, 16);
+		cursorL.setFlip(true, false);
 		box_1 = new Texture(Gdx.files.internal("battlebox_1.png"));
 		spriteBox_1 = new Sprite(box_1, 256, 64);
 		box_2 = new Texture(Gdx.files.internal("battlebox_2.png"));
@@ -76,18 +79,23 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
         batch.draw(background, 0,  0, 0, 0, 256, 144, 4, 4, 0);
+        batch.draw(spriteBox_1, 0, 0, 0, 0, 256,64,
+	    		4, 2, 0);
         for(Charac c : this.party.getComp()) {
         	batch.draw(c.getSprite(0.0f), 768, 364-(80 * this.party.getComp().indexOf(c)), 0, 0, 30, 30,
     	    		3, 3, 0);
-        }
-        batch.draw(enemy.sprite, 256, 238, 0, 0, 44, 49, 3, 3, 0);
-        batch.draw(spriteBox_1, 0, 0, 0, 0, 256,64,
-	    		4, 2, 0);
-        font.draw(batch,enemy.name, 32, 112);
-        for(Charac c : this.party.getComp()) {
         	font.draw(batch,c.getName() , 786, 112-(this.party.getComp().indexOf(c) * 24));
         	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(this.party.getComp().indexOf(c) * 24));
+        
         }
+        for(Enemy e : this.enemyGroup.getComp()) {
+        	batch.draw(e.getSprite(), e.getX(), e.getY(), 0, 0, e.getSizeX(), e.getSizeY(),
+    	    		3, 3, 0);
+        	font.draw(batch,e.getName() , 32, 112-(this.enemyGroup.getComp().indexOf(e) * 24));
+        }
+        
+        batch.draw(cursorL, 850, 384-(this.choosingIndex*80), 0, 0, 16, 16,
+	    		3, 3, 0);
 
         this.logica();
         batch.end();
@@ -123,6 +131,7 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		if(keycode == Keys.Z) {
 			this.choosingIndex ++;
 			if(this.choosingIndex > 3) {
+				
 			}
 		}
 		
@@ -167,7 +176,7 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
 	    		4, 2, 0);
 		this.party.getComp().get(choosingIndex).showOptions(batch, font);;
-		batch.draw(maozinha, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
+		batch.draw(cursorR, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
 	    		3, 3, 0);
 		
 		}

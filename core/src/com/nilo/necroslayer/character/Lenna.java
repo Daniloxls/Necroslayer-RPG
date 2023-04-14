@@ -24,7 +24,7 @@ public class Lenna extends Charac {
 		this.setMdef(1);
 		this.setMevade(0);
 		this.setSprites(new TextureAtlas(Gdx.files.internal("lenna.atlas")));
-		this.setJob(new Thief());
+		this.setJob(new WhiteMage());
 	}
 
 }
