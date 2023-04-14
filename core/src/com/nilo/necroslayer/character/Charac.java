@@ -12,6 +12,7 @@ import com.nilo.necroslayer.jobs.Job;
 import java.util.Random;
 
 public class Charac {
+	private int[] posOnPartyTab;
 	private int level;
 	private int hp;
 	private int maxHp;
@@ -246,6 +247,12 @@ public class Charac {
 	}
 	public void setChoosing(boolean choosing) {
 		this.choosing = choosing;
+	}
+	public int[] getPosOnPartyTab() {
+		return posOnPartyTab;
+	}
+	public void setPosOnPartyTab(int[] posOnPartyTab) {
+		this.posOnPartyTab = posOnPartyTab;
 	}
 
 }
