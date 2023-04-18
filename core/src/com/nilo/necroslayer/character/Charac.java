@@ -9,6 +9,8 @@ import com.nilo.necroslayer.enemy.Enemy;
 import com.nilo.necroslayer.inventory.Armor;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.jobs.Job;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Charac {
@@ -39,6 +41,7 @@ public class Charac {
 	private String ablityName;
 	private String name;
 	private boolean choosing;
+	private boolean defend = false;
 	Random generator = new Random();
 	public int getHp() {
 		return hp;
@@ -224,11 +227,14 @@ public class Charac {
         font.draw(batch,this.job.abilityName , 356, 88);
         font.draw(batch,"Item" , 356, 64);
 	}
-	public void atacar(Enemy enemy) {
+	public ArrayList<String> atacar(Enemy enemy) {
 		int dano;
+		ArrayList<String> texto = new ArrayList<String>();
 		dano = (int)this.getStrenght()/4;
 		dano += generator.nextInt((this.getrHand().getMaxDamage() - this.getrHand().getMinDamage())+1) + this.getrHand().getMinDamage();
-		enemy.setHp(enemy.getHp()-dano); 
+		enemy.setHp(enemy.getHp()-dano);
+		texto.add(this.name + " causou " + Integer.toString(dano) + " de dano.");
+		return texto;
 	}
 	public String getAblityName() {
 		return ablityName;
@@ -253,6 +259,12 @@ public class Charac {
 	}
 	public void setPosOnPartyTab(int[] posOnPartyTab) {
 		this.posOnPartyTab = posOnPartyTab;
+	}
+	public boolean isDefend() {
+		return defend;
+	}
+	public void setDefend(boolean defend) {
+		this.defend = defend;
 	}
 
 }

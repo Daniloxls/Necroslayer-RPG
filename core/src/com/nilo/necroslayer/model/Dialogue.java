@@ -41,6 +41,24 @@ public class Dialogue {
 					
 				}
 			}
+	public void render(SpriteBatch batch) {
+		if (inDialogue){
+			float dX = 82;
+			float dY = 148;
+			batch.draw(caixaDialogo, 0, 0, 0, 0, 256,48,
+		    		4, 4, 0);
+			for(char c : this.texto.get(index).toCharArray()) {
+				font.draw(batch, String.valueOf(c), dX, dY);
+				dX +=12f;
+				if(dX > 942) {
+					dY -= 16f;
+					dX = 82;
+				}
+			}
+			
+					
+				}
+			}
 	public void setDialogue(ArrayList<String> novoTexto) {
 		this.texto = novoTexto;
 		this.index = 0;

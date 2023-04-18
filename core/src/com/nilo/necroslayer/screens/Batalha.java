@@ -2,10 +2,12 @@ package com.nilo.necroslayer.screens;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,10 +35,17 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 	private FitViewport battleView;
     Necroslayer game;
     ScreenAdapter lastScreen;
+    String estrigue = "zabuza";
+    ArrayList<String> texto;
     Sprite cursorR, cursorL;
     EnemyGroup enemyGroup;
-    int choosingIndex;
-    int choiceIndex;
+    Music theme;
+    Audio audio;
+    int partyIndex = 0;
+    int choiceIndex = 0;
+    int enemyIndex = 0;
+    private boolean targeting;
+    private boolean enemyTurn;
     public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen, EnemyGroup enemyGroup) {
         this.party = party;
         this.enemyGroup = enemyGroup;
@@ -45,6 +54,10 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     }
     @Override
     public void show() {
+    	audio = Gdx.audio;
+    	theme = audio.newMusic(Gdx.files.internal("battle_theme.wav"));
+    	//theme.play();
+    	theme.setLooping(true);
 		texture = new Texture(Gdx.files.internal("background_batalha.png"));
 		background = new Sprite(texture,256,144);
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
@@ -61,8 +74,8 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		batch = new SpriteBatch();
 		battleView = new FitViewport(this.game.GAME_WORLD_WIDTH, this.game.GAME_WORLD_HEIGHT, camera);
 		battleView.apply();
-		this.choiceIndex = 0;
-		this.choosingIndex = 0;
+		texto = new ArrayList<String>();
+		texto.add(estrigue);
 		Gdx.input.setInputProcessor(this);
     }
     @Override
@@ -93,11 +106,39 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     	    		3, 3, 0);
         	font.draw(batch,e.getName() , 32, 112-(this.enemyGroup.getComp().indexOf(e) * 24));
         }
-        
-        batch.draw(cursorL, 850, 384-(this.choosingIndex*80), 0, 0, 16, 16,
+        if(!enemyTurn) {
+        	batch.draw(cursorL, 850, 384-(this.partyIndex*80), 0, 0, 16, 16,
+        			3, 3, 0);
+        }
+        batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
+	    		4, 2, 0);
+        if (targeting) {
+        	batch.draw(cursorR, this.enemyGroup.getComp().get(enemyIndex).getX(), this.enemyGroup.getComp().get(enemyIndex).getY(), 0, 0, 16, 16,
+    	    		3, 3, 0);
+        }
+        if (partyIndex > 3 & enemyTurn == false & !game.dialogo.getInDialogue()) {
+        	enemyTurn = true;
+        	enemyIndex = 0;
+        }
+        if(!game.dialogo.getInDialogue() & enemyTurn) {
+			game.dialogo.setDialogue(this.enemyGroup.getComp().get(enemyIndex).attack(party));
+			enemyIndex ++;
+			if(enemyIndex == this.enemyGroup.getComp().size()) {
+				enemyTurn = false;
+				partyIndex = 0;
+				enemyIndex = 0;
+			}
+        }
+        if(partyIndex < 4) {
+        	this.party.getComp().get(partyIndex).showOptions(batch, font);
+        }
+		batch.draw(cursorR, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
 	    		3, 3, 0);
-
-        this.logica();
+		game.dialogo.render(batch);
+		font.draw(batch, Integer.toString(partyIndex), 0, 566);
+		font.draw(batch, Boolean.toString(enemyTurn), 0, 551);
+		font.draw(batch, Boolean.toString(this.game.dialogo.getInDialogue()), 0,535);
+		font.draw(batch, Integer.toString(enemyIndex), 0,520);
         batch.end();
     }
     @Override
@@ -113,28 +154,77 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		if(keycode == Keys.F2) {
 			this.game.setScreen(lastScreen);
 		}
-		if(keycode == Keys.DOWN) {
-			if(this.choiceIndex == 2) {
-				this.choiceIndex = 0;
-			}else {
-				this.choiceIndex ++;
+		if(game.dialogo.getInDialogue()){
+			if(keycode == Keys.Z) {
+				game.dialogo.nextDialogue();
 			}
-		}
-		if(keycode == Keys.UP) {
-			if(this.choiceIndex == 0) {
-				this.choiceIndex = 1;
+		}else{
+			if (targeting) {
+				if(keycode == Keys.DOWN) {
+					if(this.enemyIndex == this.enemyGroup.getComp().size() - 1) {
+						this.enemyIndex = 0;
+					}else {
+						this.enemyIndex ++;
+					}
+				}
+				if(keycode == Keys.UP) {
+					if(this.enemyIndex == 0) {
+						this.enemyIndex = this.enemyGroup.getComp().size() - 1;
+					}
+					else {
+						this.enemyIndex --;
+					}
+				}
+				if(keycode == Keys.LEFT) {
+					if(this.enemyIndex == this.enemyGroup.getComp().size() - 1) {
+						this.enemyIndex = 0;
+					}else {
+						this.enemyIndex ++;
+					}
+				}
+				if(keycode == Keys.RIGHT) {
+					if(this.enemyIndex == 0) {
+						this.enemyIndex = this.enemyGroup.getComp().size() - 1;
+					}
+					else {
+						this.enemyIndex --;
+					}
+				}
+				if(keycode == Keys.Z) {
+					this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).atacar(this.enemyGroup.getComp().get(enemyIndex)));
+					this.partyIndex ++;
+					this.targeting = false;
+				}
+				if(keycode == Keys.X) {
+					this.targeting = false;
+				}
+			
 			}
-			else {
-				this.choiceIndex --;
-			}
-		}
-		if(keycode == Keys.Z) {
-			this.choosingIndex ++;
-			if(this.choosingIndex > 3) {
+			else{
 				
+				if(keycode == Keys.DOWN) {
+					if(this.choiceIndex == 2) {
+						this.choiceIndex = 0;
+					}else {
+						this.choiceIndex ++;
+					}
+				}
+				if(keycode == Keys.UP) {
+					if(this.choiceIndex == 0) {
+						this.choiceIndex = 2;
+					}
+					else {
+						this.choiceIndex --;
+					}
+				}
+				
+				if(keycode == Keys.Z) {
+					if(this.choiceIndex == 0) {
+						this.targeting = true;
+					}
+				}
 			}
 		}
-		
 		return true;
 	}
 	@Override
@@ -173,11 +263,7 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		return false;
 	}
 	public void logica() {
-		batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
-	    		4, 2, 0);
-		this.party.getComp().get(choosingIndex).showOptions(batch, font);;
-		batch.draw(cursorR, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
-	    		3, 3, 0);
+		
 		
 		}
 	}

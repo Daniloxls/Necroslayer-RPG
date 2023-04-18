@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.nilo.necroslayer.character.Party;
+import java.util.Random;
 
 public class Enemy {
 	private int power;
@@ -93,5 +95,19 @@ public class Enemy {
 	}
 	public void setSizeX(int sizeX) {
 		this.sizeX = sizeX;
+	}
+	public ArrayList<String> attack(Party party){
+		ArrayList<String> texto = new ArrayList<String>();
+		int dano, percento, alvo;
+		Random generator = new Random();
+		alvo = generator.nextInt(4);
+		percento = generator.nextInt(26) + 75;
+		dano = (int)(this.power * percento) /100;
+		if(party.getComp().get(alvo).isDefend()) {
+			dano = 0;
+		}
+		party.getComp().get(alvo).setHp(party.getComp().get(alvo).getHp()-dano);
+		texto.add(this.name + " causou " + Integer.toString(dano) + " de dano em " + party.getComp().get(alvo).getName() + ".");
+		return texto;
 	}
 }

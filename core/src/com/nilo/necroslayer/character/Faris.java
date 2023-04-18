@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.jobs.BlackMage;
 import com.nilo.necroslayer.jobs.Knight;
 import com.nilo.necroslayer.jobs.Thief;
@@ -28,6 +29,7 @@ public class Faris extends Charac {
 		this.setMevade(0);
 		this.setSprites(new TextureAtlas(Gdx.files.internal("faris.atlas")));
 		this.setJob(new Thief());
+		this.setrHand(new Weapon("faquinha", "esfaqueia esfaqueia!", 4,2));
 }
 
 
