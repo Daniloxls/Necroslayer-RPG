@@ -27,7 +27,7 @@ public class Galuf extends Charac {
 			this.setMevade(0);
 			this.setSprites(new TextureAtlas(Gdx.files.internal("galuf.atlas")));
 			this.setrHand(new Weapon("Vara do poder", "apenas um cajado normal", 10,2));
-			this.setJob(new BlackMage());
+			this.setJob(new BlackMage(this));
 	}
 
 }

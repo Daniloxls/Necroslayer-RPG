@@ -35,8 +35,6 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 	private FitViewport battleView;
     Necroslayer game;
     ScreenAdapter lastScreen;
-    String estrigue = "zabuza";
-    ArrayList<String> texto;
     Sprite cursorR, cursorL;
     EnemyGroup enemyGroup;
     Music theme;
@@ -44,8 +42,10 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     int partyIndex = 0;
     int choiceIndex = 0;
     int enemyIndex = 0;
+    int magicIndex = 0;
     private boolean targeting;
     private boolean enemyTurn;
+    private boolean showMagic = false;
     public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen, EnemyGroup enemyGroup) {
         this.party = party;
         this.enemyGroup = enemyGroup;
@@ -74,8 +74,6 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		batch = new SpriteBatch();
 		battleView = new FitViewport(this.game.GAME_WORLD_WIDTH, this.game.GAME_WORLD_HEIGHT, camera);
 		battleView.apply();
-		texto = new ArrayList<String>();
-		texto.add(estrigue);
 		Gdx.input.setInputProcessor(this);
     }
     @Override
@@ -116,37 +114,33 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         	batch.draw(cursorR, this.enemyGroup.getComp().get(enemyIndex).getX(), this.enemyGroup.getComp().get(enemyIndex).getY(), 0, 0, 16, 16,
     	    		3, 3, 0);
         }
-        if (partyIndex > 3 & enemyTurn == false & !game.dialogo.getInDialogue()) {
-        	enemyTurn = true;
-        	enemyIndex = 0;
-        }
-        if(!game.dialogo.getInDialogue() & enemyTurn) {
-			game.dialogo.setDialogue(this.enemyGroup.getComp().get(enemyIndex).attack(party));
-			enemyIndex ++;
-			if(enemyIndex == this.enemyGroup.getComp().size()) {
-				enemyTurn = false;
-				partyIndex = 0;
-				enemyIndex = 0;
-			}
-        }
+        
         if(partyIndex < 4) {
         	this.party.getComp().get(partyIndex).showOptions(batch, font);
         }
+        if(showMagic) {
+        	displayMagic(this.party.getComp().get(partyIndex));
+        }
+        
 		batch.draw(cursorR, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
 	    		3, 3, 0);
 		game.dialogo.render(batch);
 		font.draw(batch, Integer.toString(partyIndex), 0, 566);
 		font.draw(batch, Boolean.toString(enemyTurn), 0, 551);
 		font.draw(batch, Boolean.toString(this.game.dialogo.getInDialogue()), 0,535);
-		font.draw(batch, Integer.toString(enemyIndex), 0,520);
+		font.draw(batch, Boolean.toString(this.party.getBartz().isDefend()), 0,520);
+		this.logica();
         batch.end();
     }
     @Override
     public void hide(){
         Gdx.input.setInputProcessor(null);
+        theme.stop();
+
     }
     public void dispose () {
 		batch.dispose();
+		theme.dispose();
 		
 	}
 	@Override
@@ -191,14 +185,41 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					}
 				}
 				if(keycode == Keys.Z) {
-					this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).atacar(this.enemyGroup.getComp().get(enemyIndex)));
-					this.partyIndex ++;
-					this.targeting = false;
+					if(this.choiceIndex == 0) {
+						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).atacar(this.enemyGroup.getComp().get(enemyIndex)));
+						this.partyIndex ++;
+						this.targeting = false;
+					}
+					if(this.choiceIndex == 1) {
+						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).getJob().ability(this.enemyGroup.getComp().get(enemyIndex), this.game.player.mochila));
+						this.partyIndex ++;
+						this.targeting = false;
+					}
 				}
 				if(keycode == Keys.X) {
 					this.targeting = false;
 				}
 			
+			}else if(showMagic) {
+				if(keycode == Keys.DOWN) {
+					if(this.choiceIndex == 2) {
+						this.choiceIndex = 0;
+					}else {
+						this.choiceIndex ++;
+					}
+				}
+				if(keycode == Keys.UP) {
+					if(this.choiceIndex == 0) {
+						this.choiceIndex = 2;
+					}
+					else {
+						this.choiceIndex --;
+					}
+				}
+				if(keycode == Keys.X) {
+					this.showMagic = false;
+				}
+				
 			}
 			else{
 				
@@ -222,7 +243,24 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					if(this.choiceIndex == 0) {
 						this.targeting = true;
 					}
+					else if(this.choiceIndex == 1) {
+						if (this.party.getComp().get(partyIndex).getJob().getId() == 12) {
+							this.party.getComp().get(partyIndex).getJob().ability();
+							this.partyIndex++;
+						}
+						else if (this.party.getComp().get(partyIndex).getJob().getId() == 36) {
+							this.targeting = true;
+						}
+						else if (this.party.getComp().get(partyIndex).getJob().getId() == 132 | this.party.getComp().get(partyIndex).getJob().getId() == 120) {
+							this.showMagic = true;
+						}
+						
+						
+					}else if (this.choiceIndex == 2) {
+						
+					}
 				}
+				
 			}
 		}
 		return true;
@@ -263,8 +301,36 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		return false;
 	}
 	public void logica() {
+		if (partyIndex > 3 & enemyTurn == false & !game.dialogo.getInDialogue()) {
+        	enemyTurn = true;
+        	enemyIndex = 0;
+        }
+        if(!game.dialogo.getInDialogue() & enemyTurn) {
+			game.dialogo.setDialogue(this.enemyGroup.getComp().get(enemyIndex).attack(party));
+			enemyIndex ++;
+			if(enemyIndex == this.enemyGroup.getComp().size()) {
+				enemyTurn = false;
+				partyIndex = 0;
+				enemyIndex = 0;
+				resetDefense();
+			}
+        }
 		
 		
 		}
+	public void displayMagic(Charac c) {
+		batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
+	    		4, 2, 0);
+		for(String magia : c.getJob().getSpellList()) {
+			font.draw(batch,magia , 356, 112-(c.getJob().getSpellList().indexOf(magia) * 24));
+		}
+	}
+	public void resetDefense() {
+		for(Charac c : this.party.getComp()) {
+			if(c.isDefend()) {
+				c.setDefend(false);
+			}
+		}
+	}
 	}
 

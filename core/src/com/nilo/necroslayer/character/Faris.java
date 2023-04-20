@@ -28,7 +28,7 @@ public class Faris extends Charac {
 		this.setMdef(1);
 		this.setMevade(0);
 		this.setSprites(new TextureAtlas(Gdx.files.internal("faris.atlas")));
-		this.setJob(new Thief());
+		this.setJob(new Thief(this));
 		this.setrHand(new Weapon("faquinha", "esfaqueia esfaqueia!", 4,2));
 }
 

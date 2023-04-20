@@ -43,6 +43,7 @@ public class Charac {
 	private boolean choosing;
 	private boolean defend = false;
 	Random generator = new Random();
+	
 	public int getHp() {
 		return hp;
 	}
@@ -177,36 +178,36 @@ public class Charac {
 	}
 	
 	public Animation<Sprite> getAnimation(){
-		if(this.getJob().id < 100) {
+		if(this.getJob().getId() < 100) {
 		Animation<Sprite> currentAnimation = new Animation<Sprite>(0.2f,
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+1))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+2))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+3))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+4))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+5))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+6))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+7))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+8))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+9))),
-				(sprites.createSprite(("000")+Integer.toString(this.getJob().id+10))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+1))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+2))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+3))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+4))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+5))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+6))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+7))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+8))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+9))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+10))),
 				(sprites.createSprite(("00011")))
 				);
 			return currentAnimation;
 		}
 		else  {
 			Animation<Sprite> currentAnimation = new Animation<Sprite>(0.2f,
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+1))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+2))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+3))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+4))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+5))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+6))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+7))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+8))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+9))),
-					(sprites.createSprite(("00")+Integer.toString(this.getJob().id+10))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+1))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+2))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+3))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+4))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+5))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+6))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+7))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+8))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+9))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+10))),
 					(sprites.createSprite(("00011")))
 					);
 				return currentAnimation;
@@ -224,7 +225,7 @@ public class Charac {
 	}
 	public void showOptions(SpriteBatch batch , BitmapFont font) {
 		font.draw(batch,"Attack" , 356, 112);
-        font.draw(batch,this.job.abilityName , 356, 88);
+        font.draw(batch,this.job.getAbilityName() , 356, 88);
         font.draw(batch,"Item" , 356, 64);
 	}
 	public ArrayList<String> atacar(Enemy enemy) {

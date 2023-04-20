@@ -26,7 +26,7 @@ public class Lenna extends Charac {
 		this.setMevade(0);
 		this.setSprites(new TextureAtlas(Gdx.files.internal("lenna.atlas")));
 		this.setrHand(new Weapon("Cajado", "pedaço de madeira que encontrei no chao", 6,3));
-		this.setJob(new WhiteMage());
+		this.setJob(new WhiteMage(this));
 	}
 
 }
