@@ -4,16 +4,17 @@ import java.util.ArrayList;
 
 import com.nilo.necroslayer.character.Charac;
 import com.nilo.necroslayer.enemy.Enemy;
+import com.nilo.necroslayer.spells.Spell;
 
 public class WhiteMage extends Job{
 	public WhiteMage(Charac c){
 		super(c);
 		this.setId(120);
 		this.setAbilityName("White");
-		this.setSpellList(new ArrayList<String>());
-		this.getSpellList().add("Cura");
-		this.getSpellList().add("Revive");
-		this.getSpellList().add("Antidote");
+		this.setSpellList(new ArrayList<Spell>());
+		this.getSpellList().add(new Spell("Cura", "Cura um aliado", 8, 0, -32 , -16));
+		this.getSpellList().add(new Spell("Revive", "Revive um aliado caido", 24, 6, 0, 0, true));
+		this.getSpellList().add(new Spell("Antidote", "Cura o veneno de um aliado", 0, 0, 0, 0, false, true));
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.nilo.necroslayer.character.Charac;
 import com.nilo.necroslayer.enemy.Enemy;
 import com.nilo.necroslayer.model.Backpack;
+import com.nilo.necroslayer.spells.Spell;
 
 public abstract class Job {
 	private int id;
@@ -14,7 +15,7 @@ public abstract class Job {
 	private int magBonus;
 	private String abilityName;
 	private Charac charac;
-	private ArrayList<String> SpellList;
+	private ArrayList<Spell> SpellList;
 	public Job(Charac c) {
 		this.charac = c;
 	}
@@ -100,11 +101,11 @@ public abstract class Job {
 		this.charac = charac;
 	}
 
-	public ArrayList<String> getSpellList() {
+	public ArrayList<Spell> getSpellList() {
 		return SpellList;
 	}
 
-	public void setSpellList(ArrayList<String> spellList) {
+	public void setSpellList(ArrayList<Spell> spellList) {
 		SpellList = spellList;
 	}
 

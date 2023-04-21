@@ -24,6 +24,7 @@ import com.nilo.necroslayer.enemy.Enemy;
 import com.nilo.necroslayer.enemy.EnemyGroup;
 import com.nilo.necroslayer.model.Menu;
 import com.nilo.necroslayer.model.Player;
+import com.nilo.necroslayer.spells.Spell;
 
 public class Batalha extends ScreenAdapter implements InputProcessor{
 	Sprite background, spriteBox_1, spriteBox_2;
@@ -40,12 +41,15 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     Music theme;
     Audio audio;
     int partyIndex = 0;
+    int partyTarget = 0;
     int choiceIndex = 0;
     int enemyIndex = 0;
     int magicIndex = 0;
+    int spellTarget = -1;
     private boolean targeting;
     private boolean enemyTurn;
     private boolean showMagic = false;
+    private boolean spellTargeting = false;
     public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen, EnemyGroup enemyGroup) {
         this.party = party;
         this.enemyGroup = enemyGroup;
@@ -104,22 +108,32 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     	    		3, 3, 0);
         	font.draw(batch,e.getName() , 32, 112-(this.enemyGroup.getComp().indexOf(e) * 24));
         }
-        if(!enemyTurn) {
+        if(!enemyTurn & spellTarget != 0) {
         	batch.draw(cursorL, 850, 384-(this.partyIndex*80), 0, 0, 16, 16,
         			3, 3, 0);
         }
         batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
 	    		4, 2, 0);
-        if (targeting) {
-        	batch.draw(cursorR, this.enemyGroup.getComp().get(enemyIndex).getX(), this.enemyGroup.getComp().get(enemyIndex).getY(), 0, 0, 16, 16,
-    	    		3, 3, 0);
-        }
+       
         
         if(partyIndex < 4) {
         	this.party.getComp().get(partyIndex).showOptions(batch, font);
         }
         if(showMagic) {
         	displayMagic(this.party.getComp().get(partyIndex));
+        }
+        if(spellTarget == 0) {
+        	batch.draw(cursorL, 850, 384-(this.partyTarget*80), 0, 0, 16, 16,
+        			3, 3, 0);
+        }
+        if (targeting | spellTarget == 1) {
+        	batch.draw(cursorR, this.enemyGroup.getComp().get(enemyIndex).getX(), this.enemyGroup.getComp().get(enemyIndex).getY(), 0, 0, 16, 16,
+    	    		3, 3, 0);
+        }
+        if(spellTarget == 2) {
+        	for(Enemy e : this.enemyGroup.getComp()) {
+        		batch.draw(cursorR, e.getX(), e.getY(), 0, 0, 16, 16, 3, 3, 0);
+        	}
         }
         
 		batch.draw(cursorR, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
@@ -200,7 +214,58 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					this.targeting = false;
 				}
 			
-			}else if(showMagic) {
+			}else if(spellTargeting) {
+				if(keycode == Keys.DOWN) {
+					if(this.enemyIndex == this.enemyGroup.getComp().size() - 1) {
+						this.enemyIndex = 0;
+					}else {
+						this.enemyIndex ++;
+					}
+					if(this.partyTarget == 3) {
+						this.partyTarget = 0;
+					}else {
+						this.partyTarget ++;
+					}
+				}
+				if(keycode == Keys.UP) {
+					if(this.enemyIndex == 0) {
+						this.enemyIndex = this.enemyGroup.getComp().size() - 1;
+					}
+					else {
+						this.enemyIndex --;
+					}
+					if(this.partyTarget == 0) {
+						this.partyTarget = 3;
+					}else {
+						this.partyTarget --;
+					}
+				}
+				
+				if(keycode == Keys.X) {
+					this.spellTargeting = false;
+					this.spellTarget = -1;
+				}
+				if(keycode == Keys.Z) {
+					if(spellTarget == 0) {
+						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).getJob().getSpellList()
+								.get(choiceIndex).cast(this.party.getComp().get(partyIndex),this.party.getComp().get(partyTarget)));
+					}
+					if(spellTarget == 1) {
+						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).getJob().getSpellList()
+								.get(choiceIndex).cast(this.party.getComp().get(partyIndex),enemyGroup.getComp().get(enemyIndex)));
+					}
+					if(spellTarget == 2) {
+						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).getJob().getSpellList()
+								.get(choiceIndex).cast(this.party.getComp().get(partyIndex),enemyGroup));
+					}
+					this.partyIndex ++;
+					this.showMagic = false;
+					this.spellTargeting = false;
+					this.spellTarget = -1;
+				}
+				
+			}
+			else if(showMagic) {
 				if(keycode == Keys.DOWN) {
 					if(this.choiceIndex == 2) {
 						this.choiceIndex = 0;
@@ -214,6 +279,17 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					}
 					else {
 						this.choiceIndex --;
+					}
+				}
+				if(keycode == Keys.Z) {
+					if(party.getComp().get(partyIndex).getMagic() < this.party.getComp().get(partyIndex).getJob().getSpellList().get(choiceIndex).getCusto()) {
+						ArrayList<String> semMana = new ArrayList<String>();
+						semMana.add("Magia insuficiente");
+						this.game.dialogo.setDialogue(semMana);
+					}
+					else {
+						spellTarget = this.party.getComp().get(partyIndex).getJob().getSpellList().get(choiceIndex).getTarget();
+						spellTargeting = true;
 					}
 				}
 				if(keycode == Keys.X) {
@@ -321,8 +397,8 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 	public void displayMagic(Charac c) {
 		batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
 	    		4, 2, 0);
-		for(String magia : c.getJob().getSpellList()) {
-			font.draw(batch,magia , 356, 112-(c.getJob().getSpellList().indexOf(magia) * 24));
+		for(Spell magia : c.getJob().getSpellList()) {
+			font.draw(batch,magia.getName() , 356, 112-(c.getJob().getSpellList().indexOf(magia) * 24));
 		}
 	}
 	public void resetDefense() {
