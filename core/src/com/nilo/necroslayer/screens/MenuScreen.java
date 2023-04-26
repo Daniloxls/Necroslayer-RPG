@@ -115,8 +115,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         case BACKPACK:
         	font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
         	for(Item it : this.player.mochila.getItems()) {
-        		font.draw(batch, it.getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 20 * this.player.mochila.getItems().indexOf(it)));
-        		font.draw(batch, it.getDesc(), 50, this.game.GAME_WORLD_HEIGHT - (130 + 20 * this.player.mochila.getItems().indexOf(it)));
+        		font.draw(batch, it.getName(), 50, this.game.GAME_WORLD_HEIGHT - (100 + 30 * this.player.mochila.getItems().indexOf(it)));
         	}
 
          }        

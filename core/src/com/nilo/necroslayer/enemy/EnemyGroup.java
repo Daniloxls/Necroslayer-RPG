@@ -51,5 +51,23 @@ public class EnemyGroup {
 	public ArrayList<Enemy> getComp(){
 		return this.group;
 	}
+	
+	public int deadCount() {
+		int count = 0;
+		for (Enemy e : this.group) {
+			if(e.getHp() <= 0) {
+				count ++;
+			}
+		}
+		return count;
+	}
+	
+	public boolean isDead() {
+		boolean result = false;
+		if(deadCount() == this.group.size()) {
+			result = true;
+		}
+		return result;
+	}
 
 }

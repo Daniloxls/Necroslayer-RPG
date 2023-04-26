@@ -1,6 +1,7 @@
 package com.nilo.necroslayer.screens;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
@@ -38,18 +39,28 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     ScreenAdapter lastScreen;
     Sprite cursorR, cursorL;
     EnemyGroup enemyGroup;
+    Random random;
     Music theme;
     Audio audio;
+    Music victoryTheme;
     int partyIndex = 0;
     int partyTarget = 0;
     int choiceIndex = 0;
     int enemyIndex = 0;
+    int deadIndex = 0;
+    int deadTarget = 0;
+    int i;
     int magicIndex = 0;
     int spellTarget = -1;
+    int loot = 0;
+    int xp = 0;
+    private ArrayList<Charac> deadMembers = new ArrayList<Charac>();
+    private ArrayList<String> lootText = new ArrayList<String>();
     private boolean targeting;
     private boolean enemyTurn;
     private boolean showMagic = false;
     private boolean spellTargeting = false;
+    boolean victory = false;
     public Batalha(Necroslayer game, Party party, ScreenAdapter lastScreen, EnemyGroup enemyGroup) {
         this.party = party;
         this.enemyGroup = enemyGroup;
@@ -60,8 +71,10 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     public void show() {
     	audio = Gdx.audio;
     	theme = audio.newMusic(Gdx.files.internal("battle_theme.wav"));
+    	victoryTheme = audio.newMusic(Gdx.files.internal("victory_theme.wav"));
     	//theme.play();
     	theme.setLooping(true);
+    	random = new Random();
 		texture = new Texture(Gdx.files.internal("background_batalha.png"));
 		background = new Sprite(texture,256,144);
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
@@ -90,49 +103,74 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
         batch.draw(background, 0,  0, 0, 0, 256, 144, 4, 4, 0);
         batch.draw(spriteBox_1, 0, 0, 0, 0, 256,64,
 	    		4, 2, 0);
-        for(Charac c : this.party.getComp()) {
-        	batch.draw(c.getSprite(0.0f), 768, 364-(80 * this.party.getComp().indexOf(c)), 0, 0, 30, 30,
+        if (victory) {
+        	for(Charac c : this.party.getComp()) {
+            	batch.draw(c.getWin().getKeyFrame(this.game.elapsedTime, true), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
+        	    		3, 3, 0);
+            	this.game.elapsedTime += 0.025f;
+            	font.draw(batch,c.getName() , 786, 112-(c.getNumber() * 24));
+            	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(c.getNumber() * 24));
+            
+            }
+        }else {
+	        for(Charac c : this.party.getComp()) {
+	        	batch.draw(c.getSprite(0.0f), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
+	    	    		3, 3, 0);
+	        	font.draw(batch,c.getName() , 786, 112-(c.getNumber() * 24));
+	        	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(c.getNumber() * 24));
+	        
+	        }
+        }
+        for(Charac c : this.deadMembers) {
+        	batch.draw(c.getSprite(2.4f), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
     	    		3, 3, 0);
-        	font.draw(batch,c.getName() , 786, 112-(this.party.getComp().indexOf(c) * 24));
-        	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(this.party.getComp().indexOf(c) * 24));
+        	font.draw(batch,c.getName() , 786, 112-(c.getNumber() * 24));
+        	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(c.getNumber() * 24));
         
         }
         for(Enemy e : this.enemyGroup.getComp()) {
-        	batch.draw(e.getSprite(), e.getX(), e.getY(), 0, 0, e.getSizeX(), e.getSizeY(),
-    	    		3, 3, 0);
-        	font.draw(batch,e.getName() , 32, 112-(this.enemyGroup.getComp().indexOf(e) * 24));
+        	if(e.isAlive()) {
+	        	batch.draw(e.getSprite(), e.getX(), e.getY(), 0, 0, e.getSizeX(), e.getSizeY(),
+	    	    		3, 3, 0);
+	        	font.draw(batch,e.getName() , 32, 112-(this.enemyGroup.getComp().indexOf(e) * 24));
+        	}
         }
-        if(!enemyTurn & spellTarget != 0) {
-        	batch.draw(cursorL, 850, 384-(this.partyIndex*80), 0, 0, 16, 16,
+        if(!enemyTurn & spellTarget != 0 & partyIndex < this.party.getComp().size() & spellTarget != 6) {
+        	batch.draw(cursorL, 850, 384-(this.party.getComp().get(partyIndex).getNumber()*80), 0, 0, 16, 16,
         			3, 3, 0);
         }
         batch.draw(spriteBox_2, 320, 0, 0, 0, 80,64,
 	    		4, 2, 0);
        
         
-        if(partyIndex < 4) {
+        if(partyIndex < this.party.getComp().size()) {
         	this.party.getComp().get(partyIndex).showOptions(batch, font);
         }
         if(showMagic) {
         	displayMagic(this.party.getComp().get(partyIndex));
         }
         if(spellTarget == 0) {
-        	batch.draw(cursorL, 850, 384-(this.partyTarget*80), 0, 0, 16, 16,
+        	batch.draw(cursorL, 850, 384-(this.party.getComp().get(partyTarget).getNumber()*80), 0, 0, 16, 16,
         			3, 3, 0);
         }
         if (targeting | spellTarget == 1) {
         	batch.draw(cursorR, this.enemyGroup.getComp().get(enemyIndex).getX(), this.enemyGroup.getComp().get(enemyIndex).getY(), 0, 0, 16, 16,
     	    		3, 3, 0);
         }
+        if(spellTarget == 6) {
+        	batch.draw(cursorL, 850, 384-(this.deadMembers.get(deadTarget).getNumber()*80), 0, 0, 16, 16,
+        			3, 3, 0);
+        }
         if(spellTarget == 2) {
         	for(Enemy e : this.enemyGroup.getComp()) {
-        		batch.draw(cursorR, e.getX(), e.getY(), 0, 0, 16, 16, 3, 3, 0);
+        		if(e.isAlive()) {
+        			batch.draw(cursorR, e.getX(), e.getY(), 0, 0, 16, 16, 3, 3, 0);
+        		}
         	}
         }
         
@@ -142,7 +180,8 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		font.draw(batch, Integer.toString(partyIndex), 0, 566);
 		font.draw(batch, Boolean.toString(enemyTurn), 0, 551);
 		font.draw(batch, Boolean.toString(this.game.dialogo.getInDialogue()), 0,535);
-		font.draw(batch, Boolean.toString(this.party.getBartz().isDefend()), 0,520);
+		font.draw(batch, Integer.toString(partyTarget), 0, 505);
+		font.draw(batch, Integer.toString(deadTarget), 0, 490);
 		this.logica();
         batch.end();
     }
@@ -159,8 +198,16 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 	}
 	@Override
 	public boolean keyDown(int keycode) {
+		if(keycode == Keys.F1) {
+			this.enemyGroup.getComp().get(0).setAlive(false);
+			this.enemyGroup.getComp().get(0).setHp(0);
+		}
 		if(keycode == Keys.F2) {
 			this.game.setScreen(lastScreen);
+		}
+		if(keycode == Keys.F3) {
+			this.party.getComp().get(0).setDead(true);
+			this.party.getComp().get(0).setHp(0);
 		}
 		if(game.dialogo.getInDialogue()){
 			if(keycode == Keys.Z) {
@@ -221,10 +268,15 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					}else {
 						this.enemyIndex ++;
 					}
-					if(this.partyTarget == 3) {
+					if(this.partyTarget == this.party.getComp().size()-1) {
 						this.partyTarget = 0;
 					}else {
 						this.partyTarget ++;
+					}
+					if(this.deadTarget == this.deadMembers.size()-1) {
+						this.deadTarget = 0;
+					}else {
+						this.deadTarget ++;
 					}
 				}
 				if(keycode == Keys.UP) {
@@ -235,9 +287,14 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 						this.enemyIndex --;
 					}
 					if(this.partyTarget == 0) {
-						this.partyTarget = 3;
+						this.partyTarget = this.party.getComp().size()-1;
 					}else {
 						this.partyTarget --;
+					}
+					if(this.deadTarget == 0) {
+						this.deadTarget = this.deadMembers.size()-1;
+					}else {
+						this.deadTarget --;
 					}
 				}
 				
@@ -257,6 +314,10 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					if(spellTarget == 2) {
 						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).getJob().getSpellList()
 								.get(choiceIndex).cast(this.party.getComp().get(partyIndex),enemyGroup));
+					}
+					if(spellTarget == 6) {
+						this.game.dialogo.setDialogue(this.party.getComp().get(partyIndex).getJob().getSpellList()
+								.get(choiceIndex).cast(this.party.getComp().get(partyIndex),this.deadMembers.get(deadTarget)));
 					}
 					this.partyIndex ++;
 					this.showMagic = false;
@@ -289,7 +350,18 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 					}
 					else {
 						spellTarget = this.party.getComp().get(partyIndex).getJob().getSpellList().get(choiceIndex).getTarget();
-						spellTargeting = true;
+						if(spellTarget == 6 & this.deadMembers.isEmpty()) {
+							ArrayList<String> semMorto = new ArrayList<String>();
+							semMorto.add("Nenhum membro caido");
+							this.game.dialogo.setDialogue(semMorto);
+							spellTarget = -1;
+						}
+						else {
+							partyTarget = 0;
+							enemyIndex = 0;
+							deadTarget = 0;
+							spellTargeting = true;
+						}
 					}
 				}
 				if(keycode == Keys.X) {
@@ -377,11 +449,11 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		return false;
 	}
 	public void logica() {
-		if (partyIndex > 3 & enemyTurn == false & !game.dialogo.getInDialogue()) {
+		if (partyIndex > this.party.getComp().size()-1 & enemyTurn == false & !game.dialogo.getInDialogue()) {
         	enemyTurn = true;
         	enemyIndex = 0;
         }
-        if(!game.dialogo.getInDialogue() & enemyTurn) {
+        if(!game.dialogo.getInDialogue() & enemyTurn & !this.enemyGroup.getComp().isEmpty()) {
 			game.dialogo.setDialogue(this.enemyGroup.getComp().get(enemyIndex).attack(party));
 			enemyIndex ++;
 			if(enemyIndex == this.enemyGroup.getComp().size()) {
@@ -391,7 +463,47 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 				resetDefense();
 			}
         }
-		
+        
+        for (i = 0 ; i < this.enemyGroup.getComp().size() ; i++) {
+        	if(!this.enemyGroup.getComp().get(i).isAlive()) {
+        		this.xp += random.nextInt(this.enemyGroup.getComp().get(i).getMaxXp() - this.enemyGroup.getComp().get(i).getMinXp()) + this.enemyGroup.getComp().get(i).getMinXp()+1;
+        		this.loot += random.nextInt(this.enemyGroup.getComp().get(i).getMaxGil() - this.enemyGroup.getComp().get(i).getMinGil()) + this.enemyGroup.getComp().get(i).getMinGil()+1;
+        		this.enemyGroup.getComp().remove(i);
+        		
+        	}
+        }
+        for (i = 0 ; i < this.party.getComp().size() ; i++) {
+        	if(this.party.getComp().get(i).isDead()) {
+        		this.deadMembers.add(this.party.getComp().get(i));
+        		this.party.getComp().remove(i);
+        	}
+        }
+        for (i = 0 ; i < this.deadMembers.size() ; i++) {
+        	if(!this.deadMembers.get(i).isDead()) {
+        		this.party.getComp().add(this.deadMembers.get(i).getNumber(), this.deadMembers.get(i));
+        		this.deadMembers.remove(i);
+        	}
+        }
+        if(this.victory & !this.game.dialogo.getInDialogue()) {
+        	for(Charac c : this.deadMembers) {
+        		this.party.getComp().add(c.getNumber(), c);
+        	}
+        	this.game.setScreen(lastScreen);
+        	this.victoryTheme.stop();
+        }
+        
+        if(this.enemyGroup.getComp().isEmpty() & !this.game.dialogo.getInDialogue() & !this.victory) {
+        	this.victory = true;
+        	this.lootText.add("Voce recebeu " + Integer.toString(this.xp) + " pontos de experiência");
+        	this.lootText.add("Voce recebeu " + Integer.toString(this.loot) + " moedas de ouro");
+        	this.game.dialogo.setDialogue(lootText);
+        	this.victoryTheme.play();
+        }
+        
+        
+        if(this.game.player.party.getComp().isEmpty() & !this.game.dialogo.getInDialogue()) {
+        	this.game.setScreen(new GameOver(this.game, this.lastScreen));
+        }
 		
 		}
 	public void displayMagic(Charac c) {

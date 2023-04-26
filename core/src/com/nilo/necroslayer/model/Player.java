@@ -48,7 +48,7 @@ public class Player extends Actor {
             (textureAtlas.createSprite("001")));
 	public Animation<Sprite> currentAnimation;
 	public Backpack mochila;
-
+	private int gold;
 	State state = State.IDLE;
 	Direction direction = Direction.DOWN;
 	Rectangle bounds = new Rectangle();
@@ -70,6 +70,7 @@ public class Player extends Actor {
 		this.isMovingUp = false;
 		this.isMovingDown = false;
 		this.party = new Party();
+		this.gold = 50;
 	}
 	public void setAnimation(Direction direct) {
 		if(direct == Direction.LEFT) {
@@ -216,5 +217,11 @@ public class Player extends Actor {
 	}
 	public float getTileY(){
 		return (this.posY)/64;
+	}
+	public int getGold() {
+		return gold;
+	}
+	public void setGold(int gold) {
+		this.gold = gold;
 	}
 	}

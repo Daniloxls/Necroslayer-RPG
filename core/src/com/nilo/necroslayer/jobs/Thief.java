@@ -20,7 +20,7 @@ public class Thief extends Job{
 		if(enemy.getItem() == null) {
 			texto.add(this.getCharac().getName() + "roubou nada!");
 		}else {
-			texto.add(this.getCharac().getName() + "roubou " + enemy.getItem().getName());
+			texto.add(this.getCharac().getName() + " roubou " + enemy.getItem().getName());
 			backpack.addItem(enemy.getItem());
 			enemy.setItem(null);
 		}

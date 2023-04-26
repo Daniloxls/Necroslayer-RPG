@@ -12,8 +12,8 @@ public class WhiteMage extends Job{
 		this.setId(120);
 		this.setAbilityName("White");
 		this.setSpellList(new ArrayList<Spell>());
-		this.getSpellList().add(new Spell("Cura", "Cura um aliado", 8, 0, -32 , -16));
-		this.getSpellList().add(new Spell("Revive", "Revive um aliado caido", 24, 6, 0, 0, true));
+		this.getSpellList().add(new Spell("Cura", "Cura um aliado", 8, 0, -16 , -32));
+		this.getSpellList().add(new Spell("Revive", "Revive um aliado caido", 24, 6, -8, -12, true));
 		this.getSpellList().add(new Spell("Antidote", "Cura o veneno de um aliado", 0, 0, 0, 0, false, true));
 	}
 

@@ -12,6 +12,7 @@ import com.nilo.necroslayer.jobs.WhiteMage;
 
 public class Bartz extends Charac{
 	public Bartz(){
+		this.setNumber(0);
 		this.setLevel(1);
 		this.setName("Bartz");
 		this.setMaxHp(36);

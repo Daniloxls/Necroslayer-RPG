@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nilo.necroslayer.Necroslayer;
+import com.nilo.necroslayer.model.Mapper;
+import com.nilo.necroslayer.model.Player;
 
 public class TitleScreen extends ScreenAdapter {
 
@@ -19,6 +21,7 @@ public class TitleScreen extends ScreenAdapter {
     Texture texture;
     Viewport titleView;
     Level level;
+    Mapper map1 = new Mapper();
     public TitleScreen(Necroslayer game) {
         this.game = game;
     }
@@ -33,7 +36,12 @@ public class TitleScreen extends ScreenAdapter {
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.SPACE) {
+                	game.player = new Player(11,16);
+                	game.level_1 = new Level(23,20,"castelo_1.tmx",game.player, game.blocos, game);
+                	game.level_1.mapa = map1.mapa_1(game.level_1.mapa);
                     game.setScreen(game.level_1);
+                    
+                    
                 }
                 return true;
             }

@@ -41,15 +41,13 @@ public class Necroslayer extends Game implements ApplicationListener{
     public OrthographicCamera camera;
 	// Debug Info
     
-	int initX = 8, initY = 4;
+
 	@Override
 	public void create () {
-		player = new Player(0,0);
 		dialogo = new Dialogue();
-		level_1 = new Level(40,30,"mapa_4.tmx",player, blocos, this);
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("player.atlas"));
-		tiledMap = new TmxMapLoader().load("mapa_4.tmx");
+		tiledMap = new TmxMapLoader().load("castelo_1.tmx");
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		camera = new OrthographicCamera();
 		camera.update();

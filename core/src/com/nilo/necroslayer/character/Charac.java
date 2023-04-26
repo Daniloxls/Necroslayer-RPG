@@ -15,6 +15,7 @@ import java.util.Random;
 
 public class Charac {
 	private int[] posOnPartyTab;
+	private int number;
 	private int level;
 	private int hp;
 	private int maxHp;
@@ -42,6 +43,7 @@ public class Charac {
 	private String name;
 	private boolean choosing;
 	private boolean defend = false;
+	private boolean dead;
 	Random generator = new Random();
 	
 	public int getHp() {
@@ -214,6 +216,23 @@ public class Charac {
 			}
 		
 	}
+	public Animation<Sprite> getWin(){
+		if(this.getJob().getId() < 100) {
+		Animation<Sprite> currentAnimation = new Animation<Sprite>(2.5f,
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()))),
+				(sprites.createSprite(("000")+Integer.toString(this.getJob().getId()+8)))
+				);
+			return currentAnimation;
+		}
+		else  {
+			Animation<Sprite> currentAnimation = new Animation<Sprite>(2.5f,
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()))),
+					(sprites.createSprite(("00")+Integer.toString(this.getJob().getId()+8)))
+					);
+				return currentAnimation;
+			}
+		
+	}
 	public Sprite getSprite(float n) {
 		return this.getAnimation().getKeyFrame(n);
 	}
@@ -235,6 +254,10 @@ public class Charac {
 		dano += generator.nextInt((this.getrHand().getMaxDamage() - this.getrHand().getMinDamage())+1) + this.getrHand().getMinDamage();
 		enemy.setHp(enemy.getHp()-dano);
 		texto.add(this.name + " causou " + Integer.toString(dano) + " de dano.");
+		if (enemy.getHp() <= 0) {
+			enemy.setAlive(false);
+			enemy.setHp(0);
+		}
 		return texto;
 	}
 	public String getAblityName() {
@@ -266,6 +289,18 @@ public class Charac {
 	}
 	public void setDefend(boolean defend) {
 		this.defend = defend;
+	}
+	public boolean isDead() {
+		return dead;
+	}
+	public void setDead(boolean dead) {
+		this.dead = dead;
+	}
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
 	}
 
 }

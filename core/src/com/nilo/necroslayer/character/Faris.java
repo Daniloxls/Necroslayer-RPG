@@ -12,6 +12,7 @@ import com.nilo.necroslayer.jobs.WhiteMage;
 
 public class Faris extends Charac {
 	public Faris(){
+		this.setNumber(3);
 		this.setLevel(1);
 		this.setName("Faris");
 		this.setMaxHp(35);

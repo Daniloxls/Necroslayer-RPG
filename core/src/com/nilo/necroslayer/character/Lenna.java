@@ -9,6 +9,7 @@ import com.nilo.necroslayer.jobs.WhiteMage;
 
 public class Lenna extends Charac {
 	public Lenna(){
+		this.setNumber(1);
 		this.setLevel(1);
 		this.setName("Lenna");
 		this.setMaxHp(35);

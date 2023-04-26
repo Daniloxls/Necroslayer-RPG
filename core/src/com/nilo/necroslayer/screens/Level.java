@@ -53,6 +53,8 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	public final int GAME_WORLD_HEIGHT = 576;
 	public final int GAME_WORLD_WIDTH = 1024;
 	public String time, cXY, tXY, pXY;
+	int[] backgroundLayers = {0,1,2};
+	int[] foregroundLayers = {3};
 	public Level(Necroslayer game) {
 		this.game = game;
 	}
@@ -66,7 +68,6 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		playcam.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
 		viewport.apply();
-		mapa.gridBlocos[1][1].setItem(new Bau(new Weapon("Teste", "A espada mais pica", 6, 8)));
 
 	}
 	@Override
@@ -88,7 +89,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	public void render(float delta) {
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		tMR.setView((OrthographicCamera)viewport.getCamera());
-		tMR.render();
+		tMR.render(backgroundLayers);
 		
 		batch.begin();
 		if(player.isWalking) {
@@ -115,6 +116,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
 		font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
 		font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
+		tMR.render(foregroundLayers);
 		batch.setProjectionMatrix(playcam.combined);
 		batch.end();
 	        

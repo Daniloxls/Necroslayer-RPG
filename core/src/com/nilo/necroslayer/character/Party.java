@@ -2,6 +2,8 @@ package com.nilo.necroslayer.character;
 
 import java.util.ArrayList;
 
+import com.nilo.necroslayer.enemy.Enemy;
+
 public class Party {
 	private ArrayList<Charac> comp;
 	public Party() {
@@ -47,5 +49,6 @@ public class Party {
 		this.comp.remove(3);
 		this.comp.add(3, faris);
 	}
+	
 }
 
