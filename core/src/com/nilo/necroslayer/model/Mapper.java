@@ -3,11 +3,73 @@ package com.nilo.necroslayer.model;
 import com.nilo.necroslayer.inventory.Item;
 import com.nilo.necroslayer.inventory.Weapon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
+
 public class Mapper {
 	MapaBlocos mapa;
 	
+	public MapaBlocos tutorial(MapaBlocos mapa) {
+		this.mapa = mapa;
+		for(int i = 0; i < mapa.width; i++) {
+			this.mapa.gridBlocos[i][8].isWalkable = false;
+		}
+		for(int i = 6; i < 9; i++) {
+			this.mapa.gridBlocos[i][4].isWalkable = false;
+		}
+		for(int i = 5; i < 8; i++) {
+			this.mapa.gridBlocos[5][i].isWalkable = false;
+			this.mapa.gridBlocos[9][i].isWalkable = false;
+		}
+		for(int i = 0; i< 8; i++) {
+			this.mapa.gridBlocos[15][i].isWalkable = false;
+			this.mapa.gridBlocos[16][i].isWalkable = false;
+			this.mapa.gridBlocos[25][i].isWalkable = false;
+			this.mapa.gridBlocos[26][i].isWalkable = false;
+		}
+		this.mapa.gridBlocos[20][7].setCenario("Tocha");
+		this.mapa.gridBlocos[22][7].setCenario("Tocha");
+		this.mapa.gridBlocos[21][7].setItem(new Bau(new Item("Espada", "Espada de ferro")));
+		this.mapa.setBloco(32, 8, new Porta(32, 8, false, null));
+		return this.mapa;
+	}
+	public MapaBlocos mercado(MapaBlocos mapa) {
+		this.mapa = mapa;
+		this.mapa.gridBlocos[0][4].isWalkable = false;
+		this.mapa.gridBlocos[17][4].isWalkable = false;
+		this.mapa.gridBlocos[0][9].isWalkable = false;
+		this.mapa.gridBlocos[17][9].isWalkable = false;
+		this.mapa.gridBlocos[7][13].isWalkable = false;
+		this.mapa.gridBlocos[11][13].isWalkable = false;
+		for(int i = 14 ; i < 18; i++) {
+			this.mapa.gridBlocos[i][12].isWalkable = false;
+			this.mapa.gridBlocos[i][13].isWalkable = false;
+			this.mapa.gridBlocos[i][14].isWalkable = false;
+			this.mapa.gridBlocos[i][15].isWalkable = false;
+		}
+		for(int i = 2; i < 6; i++) {
+			this.mapa.gridBlocos[i][4].isWalkable = false;
+			this.mapa.gridBlocos[i][5].isWalkable = false;
+			this.mapa.gridBlocos[i][6].isWalkable = false;
+			this.mapa.gridBlocos[i-1][11].isWalkable = false;
+			this.mapa.gridBlocos[i-1][12].isWalkable = false;
+			this.mapa.gridBlocos[i-1][13].isWalkable = false;
+		}
+		this.mapa.gridBlocos[3][5].isWalkable = true;
+		this.mapa.gridBlocos[3][6].isWalkable = true;
+		this.mapa.gridBlocos[2][12].isWalkable = true;
+		this.mapa.gridBlocos[2][13].isWalkable = true;
+		return this.mapa;
+	}
 	public MapaBlocos mapa_1(MapaBlocos mapa) {
 		this.mapa = mapa;
+		Json json = new Json();
+		//String text = json.to;
+		//mapa = json.fromJson(MapaBlocos.class, Gdx.files.internal("level1.json"));
+		
 		this.mapa.gridBlocos[0][1].isWalkable = false;
 		this.mapa.gridBlocos[0][2].isWalkable = false;
 		this.mapa.gridBlocos[0][3].isWalkable = false;
@@ -151,6 +213,9 @@ public class Mapper {
 		this.mapa.gridBlocos[2][10].setItem(new Bau(new Item("Potion", "Health Potion")));
 		this.mapa.gridBlocos[21][10].setItem(new Bau(new Weapon("Cajado Branco", "Feito de madeira branca", 10, 12)));
 		this.mapa.gridBlocos[20][10].setItem(new Bau(new Item("Elixir", "Magic Potion")));
+		
+		//System.out.println(json.prettyPrint(mapa));
+		
 		return this.mapa;
 	}
 

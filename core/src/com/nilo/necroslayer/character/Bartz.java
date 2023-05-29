@@ -1,6 +1,7 @@
 package com.nilo.necroslayer.character;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,6 +32,8 @@ public class Bartz extends Charac{
 		this.setSprites(new TextureAtlas(Gdx.files.internal("bartz.atlas")));
 		this.setJob(new Knight(this));
 		this.setrHand(new Weapon("espada", "muito doida", 8,5));
+		this.setTexture(new Texture(Gdx.files.internal("char1.png")));
+		this.setOnlySprite(new Sprite(this.getTexture(),31,32));
 	}
 
 }

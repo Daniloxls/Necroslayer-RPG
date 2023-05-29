@@ -75,8 +75,8 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     	//theme.play();
     	theme.setLooping(true);
     	random = new Random();
-		texture = new Texture(Gdx.files.internal("background_batalha.png"));
-		background = new Sprite(texture,256,144);
+		texture = new Texture(Gdx.files.internal("battleback8.png"));
+		background = new Sprite(texture,1104,621);
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
 		cursorR = new Sprite(handTexture, 16, 16);
 		cursorL = new Sprite(handTexture, 16, 16);
@@ -105,10 +105,10 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         camera.update();
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
-        batch.draw(background, 0,  0, 0, 0, 256, 144, 4, 4, 0);
+        batch.draw(background, 0,  0, 0, 0, 1104, 621, 1, 1, 0);
         batch.draw(spriteBox_1, 0, 0, 0, 0, 256,64,
 	    		4, 2, 0);
-        if (victory) {
+        /*if (victory) {
         	for(Charac c : this.party.getComp()) {
             	batch.draw(c.getWin().getKeyFrame(this.game.elapsedTime, true), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
         	    		3, 3, 0);
@@ -117,15 +117,15 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
             	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(c.getNumber() * 24));
             
             }
-        }else {
+        }else {*/
 	        for(Charac c : this.party.getComp()) {
-	        	batch.draw(c.getSprite(0.0f), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
+	        	batch.draw(c.getSprite(), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
 	    	    		3, 3, 0);
 	        	font.draw(batch,c.getName() , 786, 112-(c.getNumber() * 24));
 	        	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(c.getNumber() * 24));
 	        
 	        }
-        }
+        //}
         for(Charac c : this.deadMembers) {
         	batch.draw(c.getSprite(2.4f), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
     	    		3, 3, 0);
@@ -136,7 +136,7 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         for(Enemy e : this.enemyGroup.getComp()) {
         	if(e.isAlive()) {
 	        	batch.draw(e.getSprite(), e.getX(), e.getY(), 0, 0, e.getSizeX(), e.getSizeY(),
-	    	    		3, 3, 0);
+	    	    		4, 4, 0);
 	        	font.draw(batch,e.getName() , 32, 112-(this.enemyGroup.getComp().indexOf(e) * 24));
         	}
         }

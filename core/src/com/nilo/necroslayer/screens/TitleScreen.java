@@ -30,16 +30,16 @@ public class TitleScreen extends ScreenAdapter {
     public void show(){
     	titleView = new FitViewport(this.game.GAME_WORLD_WIDTH, this.game.GAME_WORLD_HEIGHT, this.game.camera);
 		titleView.apply();
-    	texture = new Texture(Gdx.files.internal("titulo.png"));
+    	texture = new Texture(Gdx.files.internal("titulo2.png"));
     	background = new Sprite(texture,1024,576);
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.SPACE) {
-                	game.player = new Player(11,16);
-                	game.level_1 = new Level(23,20,"castelo_1.tmx",game.player, game.blocos, game);
-                	game.level_1.mapa = map1.mapa_1(game.level_1.mapa);
-                    game.setScreen(game.level_1);
+                	game.player = new Player();
+                	game.getLevels().add(new Tutorial(36,11,"tutorial.tmx",game.player, game.blocos, game, 7, 6));
+                	game.getLevels().get(0).mapa = map1.tutorial(game.getLevels().get(0).mapa);
+                	game.setScreen(game.getLevels().get(0));
                     
                     
                 }

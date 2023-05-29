@@ -1,6 +1,9 @@
 package com.nilo.necroslayer.screens;
 
 import com.badlogic.gdx.Screen;
+
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -38,10 +41,11 @@ public class GameOver extends ScreenAdapter {
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.SPACE) {
-                	game.player = new Player(11,16);
-                	game.level_1 = new Level(23,20,"castelo_1.tmx",game.player, game.blocos, game);
-                	game.level_1.mapa = map1.mapa_1(game.level_1.mapa);
-                    game.setScreen(game.level_1);
+                	game.player = new Player();
+                	game.setLevels(new ArrayList<Level>());
+                	game.getLevels().add(new Level(23,20,"castelo_1.tmx",game.player, game.blocos, game, 11, 16));
+                	game.getLevels().get(0).mapa = map1.mapa_1(game.getLevels().get(0).mapa);
+                	game.setScreen(game.getLevels().get(0));
                 }
                 return true;
             }

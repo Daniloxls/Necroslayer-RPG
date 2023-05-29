@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nilo.necroslayer.inventory.Item;
 
 public class BlocoItem {
+	private boolean publico;
+	private String Name;
 	private boolean interactable;
 	private boolean hasDialogue;
 	private boolean hasSprite;
@@ -18,6 +20,15 @@ public class BlocoItem {
 		this.setHasDialogue(false);
 		this.setHasSprite(false);
 	}
+	
+	public ArrayList<String> depurar(){
+		ArrayList<String> texto = new ArrayList<String>();
+		texto.add("String nome = " + Name + ";");
+		texto.add("boolean interagivel = " + Boolean.toString(this.interactable) + ";" );
+		
+		return texto;
+		
+	}
 
 	public void setItem(Item item) {
 		this.item = item;
@@ -26,7 +37,7 @@ public class BlocoItem {
 
 	}
 	public void render(SpriteBatch batch,int x, int y) {
-		batch.draw(sprite, x, y, 0, 0, 16, 16, 4, 4, 0);
+		batch.draw(sprite, x, y, 0, 0, 18, 32, 4, 4, 0);
 	}
 	
 	public Sprite getSprite() {
@@ -53,5 +64,13 @@ public class BlocoItem {
 	}
 	public void setHasSprite(boolean hasSprite) {
 		this.hasSprite = hasSprite;
+	}
+
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
 	}
 }

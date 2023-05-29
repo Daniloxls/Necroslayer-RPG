@@ -1,5 +1,6 @@
 package com.nilo.necroslayer.character;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -44,6 +45,8 @@ public class Charac {
 	private boolean choosing;
 	private boolean defend = false;
 	private boolean dead;
+	private Texture texture;
+	private Sprite onlySprite;
 	Random generator = new Random();
 	
 	public int getHp() {
@@ -233,6 +236,9 @@ public class Charac {
 			}
 		
 	}
+	public Sprite getSprite() {
+		return this.onlySprite;
+	}
 	public Sprite getSprite(float n) {
 		return this.getAnimation().getKeyFrame(n);
 	}
@@ -301,6 +307,18 @@ public class Charac {
 	}
 	public void setNumber(int number) {
 		this.number = number;
+	}
+	public Sprite getOnlySprite() {
+		return onlySprite;
+	}
+	public void setOnlySprite(Sprite onlySprite) {
+		this.onlySprite = onlySprite;
+	}
+	public Texture getTexture() {
+		return texture;
+	}
+	public void setTexture(Texture texture) {
+		this.texture = texture;
 	}
 
 }

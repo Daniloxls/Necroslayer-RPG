@@ -1,6 +1,8 @@
 package com.nilo.necroslayer.character;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.jobs.BlackMage;
@@ -28,6 +30,8 @@ public class Galuf extends Charac {
 		this.setSprites(new TextureAtlas(Gdx.files.internal("galuf.atlas")));
 		this.setrHand(new Weapon("Vara do poder", "apenas um cajado normal", 10,2));
 		this.setJob(new BlackMage(this));
+		this.setTexture(new Texture(Gdx.files.internal("char3.png")));
+		this.setOnlySprite(new Sprite(this.getTexture(),31,32));
 	}
 
 }

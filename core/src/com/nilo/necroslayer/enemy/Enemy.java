@@ -27,18 +27,18 @@ public class Enemy {
 	private Item item;
 	private boolean alive;
 	public Enemy(){
-		this.setName("Morcego");
+		this.setName("Praga");
 		this.setPower(8);
 		this.setHp(24);
 		this.setMp(0);
 		this.setEvade(0);
-		this.setSizeX(44);
-		this.setSizeY(49);
+		this.setSizeX(32);
+		this.setSizeY(32);
 		this.minXp = 15;
 		this.maxXp = 23;
 		this.minGil = 45;
 		this.maxGil =73;
-		this.texture  = new Texture(Gdx.files.internal("bat.png"));
+		this.texture  = new Texture(Gdx.files.internal("bug.png"));
 		this.setSprite(new Sprite(texture, this.sizeX, this.sizeY));
 		this.setItem(new Weapon("faquinha", "esfaqueia esfaqueia!", 4,2));
 		this.alive = true;

@@ -8,9 +8,8 @@ public class Backpack {
 	int maxItens;
 	private ArrayList<Item> mochila;
 	
-	public Backpack(int max){
+	public Backpack(){
 		 this.mochila = new ArrayList<Item>();
-		 this.maxItens = max;
 	}
 	
 	

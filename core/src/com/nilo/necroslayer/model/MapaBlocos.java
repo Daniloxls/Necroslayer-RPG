@@ -27,5 +27,7 @@ public class MapaBlocos {
 			}
 		}
 	}
-	
+	public void setBloco(int x, int y, Bloco bloco) {
+		this.gridBlocos[x][y] = bloco;
+	}
 }

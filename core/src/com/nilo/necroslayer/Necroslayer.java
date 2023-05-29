@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.nilo.necroslayer.model.Bloco;
+import com.nilo.necroslayer.model.CodeBlock;
 import com.nilo.necroslayer.model.Dialogue;
 import com.nilo.necroslayer.model.Player;
 import com.nilo.necroslayer.screens.Level;
@@ -29,12 +30,14 @@ public class Necroslayer extends Game implements ApplicationListener{
 	public Sprite sprite, caixaDialogo;
 	public TextureAtlas textureAtlas;
 	public Dialogue dialogo;
+	private CodeBlock bloco;
 	public float elapsedTime = 0;
 	float unitScale = 1 / 16f;
 	public final int GAME_WORLD_HEIGHT = 576;
 	public final int GAME_WORLD_WIDTH = 1024;
 	public FitViewport viewport;
 	public Player player;
+	private ArrayList<Level> levels = new ArrayList<Level>();
 	public Level level_1;
 	public Bloco[][] blocos;
 	
@@ -45,6 +48,7 @@ public class Necroslayer extends Game implements ApplicationListener{
 	@Override
 	public void create () {
 		dialogo = new Dialogue();
+		bloco = new CodeBlock();
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal("player.atlas"));
 		tiledMap = new TmxMapLoader().load("castelo_1.tmx");
@@ -66,4 +70,17 @@ public class Necroslayer extends Game implements ApplicationListener{
 		textureAtlas.dispose();
 		
 	}
+	public ArrayList<Level> getLevels() {
+		return levels;
+	}
+	public void setLevels(ArrayList<Level> levels) {
+		this.levels = levels;
+	}
+	public CodeBlock getCodeBlock() {
+		return bloco;
+	}
+	public void setCodeBlock(CodeBlock bloco) {
+		this.bloco = bloco;
+	}
+	
 }

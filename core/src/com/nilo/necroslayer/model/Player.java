@@ -26,26 +26,30 @@ public class Player extends Actor {
 		LEFT, RIGHT, UP, DOWN
 	}
 	static final float SIZE = 1f;
-	World world;
 	public boolean isWalking,isMovingLeft, isMovingRight, isMovingUp, isMovingDown;
 	public float posX, posY, tileX, tileY;
 	public int targetX, targetY;
 	TextureAtlas textureAtlas= new TextureAtlas(Gdx.files.internal("player.atlas"));;
 	public Animation<Sprite> southAnimation = new Animation<Sprite>(0.2f,
-            (textureAtlas.createSprite("000")),
-            (textureAtlas.createSprite("001")));
+            (textureAtlas.createSprite("001")),
+            (textureAtlas.createSprite("002")));
 	public Animation<Sprite> northAnimation = new Animation<Sprite>(0.2f,
-            (textureAtlas.createSprite("002")),
-            (textureAtlas.createSprite("003")));
+            (textureAtlas.createSprite("010")),
+            (textureAtlas.createSprite("011")));
 	public Animation<Sprite> eastAnimation = new Animation<Sprite>(0.2f,
-            (textureAtlas.createSprite("006")),
-            (textureAtlas.createSprite("007")));
+            (textureAtlas.createSprite("007")),
+            (textureAtlas.createSprite("008")));
 	public Animation<Sprite> westAnimation= new Animation<Sprite>(0.2f,
             (textureAtlas.createSprite("004")),
             (textureAtlas.createSprite("005")));
 	public Animation<Sprite> southIdle = new Animation<Sprite>(0.2f,
-            (textureAtlas.createSprite("000")),
-            (textureAtlas.createSprite("001")));
+            (textureAtlas.createSprite("000")));
+	public Animation<Sprite> northIdle = new Animation<Sprite>(0.2f,
+            (textureAtlas.createSprite("009")));
+	public Animation<Sprite> eastIdle = new Animation<Sprite>(0.2f,
+            (textureAtlas.createSprite("006")));
+	public Animation<Sprite> westIdle = new Animation<Sprite>(0.2f,
+            (textureAtlas.createSprite("003")));
 	public Animation<Sprite> currentAnimation;
 	public Backpack mochila;
 	private int gold;
@@ -53,18 +57,12 @@ public class Player extends Actor {
 	Direction direction = Direction.DOWN;
 	Rectangle bounds = new Rectangle();
 	public Party party;
-	public Player(int tileX, int tileY) {
-		this.mochila = new Backpack(20);
-		this.tileX = tileX;
-		this.tileY = tileY;
+	public Player() {
+		this.mochila = new Backpack();
 		this.bounds.height = SIZE;
 		this.bounds.width = SIZE;
-		this.targetX = tileX;
-		this.targetY = tileY;
 		this.currentAnimation = this.southIdle;
 		this.isWalking = false;
-		this.posX = (tileX*64);
-		this.posY = (tileY*64);
 		this.isMovingLeft = false;
 		this.isMovingRight = false;
 		this.isMovingUp = false;
@@ -72,18 +70,42 @@ public class Player extends Actor {
 		this.party = new Party();
 		this.gold = 50;
 	}
-	public void setAnimation(Direction direct) {
-		if(direct == Direction.LEFT) {
-			this.currentAnimation = this.westAnimation;
+	public void setPos(int x, int y) {
+		this.tileX = x;
+		this.tileY = y;
+		this.targetX = x;
+		this.targetY = y;
+		this.posX = x*64;
+		this.posY = y*64;
+	}
+	public void setAnimation() {
+		if(this.isWalking) {
+			if(this.direction == Direction.LEFT) {
+				this.currentAnimation = this.westAnimation;
+			}
+			if(this.direction == Direction.RIGHT) {
+				this.currentAnimation = this.eastAnimation;
+			}
+			if(this.direction == Direction.DOWN) {
+				this.currentAnimation = this.southAnimation;
+			}
+			if(this.direction == Direction.UP) {
+				this.currentAnimation = this.northAnimation;
+			}
 		}
-		if(direct == Direction.RIGHT) {
-			this.currentAnimation = this.eastAnimation;
-		}
-		if(direct == Direction.DOWN) {
-			this.currentAnimation = this.southAnimation;
-		}
-		if(direct == Direction.UP) {
-			this.currentAnimation = this.northAnimation;
+		else {
+			if(this.direction == Direction.LEFT) {
+				this.currentAnimation = this.westIdle;
+			}
+			if(this.direction == Direction.RIGHT) {
+				this.currentAnimation = this.eastIdle;
+			}
+			if(this.direction == Direction.DOWN) {
+				this.currentAnimation = this.southIdle;
+			}
+			if(this.direction == Direction.UP) {
+				this.currentAnimation = this.northIdle;
+			}
 		}
 		
 	}
@@ -95,6 +117,44 @@ public class Player extends Actor {
 		else {
 			this.isWalking = true;
 		}
+	}
+	public ArrayList<String> depurar(MapaBlocos mapa) {
+		Bloco blocoFacing;
+		
+		if(this.direction == Direction.LEFT) {
+			if(this.targetX == 0) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocoFacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+			}
+		}
+		else if(this.direction == Direction.RIGHT) {
+			if(this.targetX == mapa.width-1) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocoFacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+			}
+		}
+		else if(this.direction == Direction.DOWN) {
+			if(this.targetY == 0) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocoFacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+			}
+		}
+		else{
+			if(this.targetY == mapa.height-1) {
+				return new ArrayList<String>();
+			}
+			else {
+				blocoFacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+			}
+		}
+		return blocoFacing.depurar();
+		
 	}
 	public boolean inTarget() {
 		if((this.getTileX() == this.targetX & this.getTileY() == this.targetY)) {
@@ -160,7 +220,7 @@ public class Player extends Actor {
 						}
 				}
 				this.setWalking();
-				this.setAnimation(this.direction);
+				this.setAnimation();
 			}
 		}
 	
@@ -212,6 +272,43 @@ public class Player extends Actor {
 			return new ArrayList<String>();
 		}
 	}
+	
+	public Bloco getFacingBlock(MapaBlocos mapa) {
+		Bloco blocofacing;
+		if(this.direction == Direction.LEFT) {
+			if(this.targetX == 0) {
+				return null;
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX-1][this.targetY];
+			}
+		}
+		else if(this.direction == Direction.RIGHT) {
+			if(this.targetX == mapa.width-1) {
+				return null;
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX+1][this.targetY];
+			}
+		}
+		else if(this.direction == Direction.DOWN) {
+			if(this.targetY == 0) {
+				return null;
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX][this.targetY-1];
+			}
+		}
+		else{
+			if(this.targetY == mapa.height-1) {
+				return null;
+			}
+			else {
+				blocofacing = mapa.gridBlocos[this.targetX][this.targetY+1];
+			}
+		}
+		return blocofacing;
+	}
 	public float getTileX(){
 		return (this.posX)/64;
 	}
@@ -224,4 +321,4 @@ public class Player extends Actor {
 	public void setGold(int gold) {
 		this.gold = gold;
 	}
-	}
+}

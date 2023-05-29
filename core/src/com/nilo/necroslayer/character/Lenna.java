@@ -1,6 +1,8 @@
 package com.nilo.necroslayer.character;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.nilo.necroslayer.inventory.Weapon;
 import com.nilo.necroslayer.jobs.BlackMage;
@@ -28,6 +30,8 @@ public class Lenna extends Charac {
 		this.setSprites(new TextureAtlas(Gdx.files.internal("lenna.atlas")));
 		this.setrHand(new Weapon("Cajado", "pedaço de madeira que encontrei no chao", 6,3));
 		this.setJob(new WhiteMage(this));
+		this.setTexture(new Texture(Gdx.files.internal("char2.png")));
+		this.setOnlySprite(new Sprite(this.getTexture(),31,32));
 	}
 
 }

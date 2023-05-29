@@ -54,16 +54,17 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	public final int GAME_WORLD_WIDTH = 1024;
 	public String time, cXY, tXY, pXY;
 	int[] backgroundLayers = {0,1,2};
-	int[] foregroundLayers = {3};
+	int[] foregroundLayers = {3,4};
 	public Level(Necroslayer game) {
 		this.game = game;
 	}
-	public Level(int width, int height, String mapname, Player player, Bloco[][] blocos, Necroslayer game){
+	public Level(int width, int height, String mapname, Player player, Bloco[][] blocos, Necroslayer game, int playerX, int playerY){
 		mapa = new MapaBlocos(width,height);
 		this.game = game;
 		tiledMap = new TmxMapLoader().load(mapname);
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		this.player = player;
+		this.player.setPos(playerX, playerY);
 		playcam = new PlayerCamera(player, mapa);
 		playcam.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
@@ -93,7 +94,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		
 		batch.begin();
 		if(player.isWalking) {
-			this.game.elapsedTime += 0.025f;
+			this.game.elapsedTime += 0.020f;
 		}
 		player.walk(mapa);
 		if(this.game.elapsedTime > 0.4f) {
@@ -103,15 +104,18 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		playcam.update();
 		playcam.follow(player, mapa);
 		spriteanda = (Sprite)player.currentAnimation.getKeyFrame(this.game.elapsedTime);
-		batch.draw(spriteanda, player.posX, player.posY, 0, 0, 16, 16,
+		batch.draw(spriteanda, player.posX, player.posY, 0, 0, 16, 20,
 		    		4, 4, 0);
 		mapa.renderItems(batch);
+		
 		game.dialogo.render(playcam, batch);
+		game.getCodeBlock().render(playcam, batch);
 		
 		time = String.format("%f",this.game.elapsedTime);
 		cXY = String.format("%f , %f",player.getTileX(),player.getTileY());
 		tXY = String.format("%d , %d",player.targetX, player.targetY);
 		pXY = String.format("%f , %f",player.posX, player.posY);
+		
 		font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
 		font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
 		font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
@@ -146,28 +150,45 @@ public class Level extends ScreenAdapter implements InputProcessor{
 			this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy(),new Enemy(),new Enemy())));
 		}
 		if(keycode == Keys.Z) {
-			if(game.dialogo.getInDialogue()) {
-				game.dialogo.nextDialogue();
-			}
-			else {
-				game.dialogo.setDialogue(player.interact(mapa));
+			if(!game.getCodeBlock().isShowingCode()) {
+				if(game.dialogo.getInDialogue()) {
+					game.dialogo.nextDialogue();
+				}
+				else {
+					game.dialogo.setDialogue(player.interact(mapa));
+				}
 			}
 			
 		}
-		if(!game.dialogo.getInDialogue()) {
-			if(keycode == Keys.LEFT) {
-				player.isMovingLeft = true;
-			}
-			if(keycode == Keys.RIGHT) {
-				player.isMovingRight = true;
-			}
-			if(keycode == Keys.DOWN) {
-				player.isMovingDown = true;
-			}
-			if(keycode == Keys.UP) {
-				player.isMovingUp = true;
+		if(keycode == Keys.X) {
+			if(game.getCodeBlock().isShowingCode()) {
+				this.mapa.setBloco(player.getFacingBlock(mapa).getx(),player.getFacingBlock(mapa).gety(), game.getCodeBlock().changeBlock());
+				game.getCodeBlock().setShowingCode(false);
 			}
 		}
+
+		if(!game.dialogo.getInDialogue()) {
+			if(keycode == Keys.C) {
+				game.getCodeBlock().setCode(player.depurar(mapa), player.getFacingBlock(mapa));
+				if(keycode == Keys.DOWN) {
+					game.getCodeBlock().downOption();
+				}
+			}
+			if(!game.getCodeBlock().isShowingCode()) {
+				if(keycode == Keys.LEFT) {
+					player.isMovingLeft = true;
+				}
+				if(keycode == Keys.RIGHT) {
+					player.isMovingRight = true;
+				}
+				if(keycode == Keys.DOWN) {
+					player.isMovingDown = true;
+				}
+				if(keycode == Keys.UP) {
+					player.isMovingUp = true;
+				}
+			}
+			}
 		return true;
 	}
 	@Override
