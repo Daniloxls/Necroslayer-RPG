@@ -144,10 +144,10 @@ public class CodeBlock {
 		case 0:
 			if (this.bloco.getBlocopropiedades().get(this.choiceIndex).get(3) == 0) {
 				this.bloco.getBlocopropiedades().get(this.choiceIndex).set(3, 1);
-				this.bloco.setWalkable(true);
+				this.bloco.setWalkable(false);
 			}else {
 				this.bloco.getBlocopropiedades().get(this.choiceIndex).set(3, 0);
-				this.bloco.setWalkable(false);
+				this.bloco.setWalkable(true);
 			}
 			break;
 		case 1:

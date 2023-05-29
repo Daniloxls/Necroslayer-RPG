@@ -18,7 +18,7 @@ public class Porta extends Bloco{
 		this.setBlocopropiedades(new ArrayList<ArrayList<Integer>>());
 		this.getBlocopropiedades().add(new ArrayList<Integer>(Arrays.asList(0, 0,0,0)));
 		this.getBlocopropiedades().add(new ArrayList<Integer>(Arrays.asList(1, 0,0,0)));
-		this.getBlocopropiedades().add(new ArrayList<Integer>(Arrays.asList(2, 1,0,0)));
+		this.getBlocopropiedades().add(new ArrayList<Integer>(Arrays.asList(2, 1,0,1)));
 		this.level = level;
 		this.getItem().setHasDialogue(true);
 		this.getItem().setInteractable(true);
