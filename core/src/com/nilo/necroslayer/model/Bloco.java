@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.nilo.necroslayer.screens.Level;
+
 public class Bloco {
 	private int x,y;
 	private boolean publicBlock;
@@ -84,6 +86,18 @@ public class Bloco {
 	}
 	public void setBlocopropiedades(ArrayList<ArrayList<Integer>> blocopropiedades) {
 		this.blocopropiedades = blocopropiedades;
+	}
+	public boolean checkPlayer(int x, int y) {
+		return false;
+	}
+	public int getDestiny() {
+		return 0;
+	}
+	public int getDestinyX() {
+		return 0;
+	}
+	public int getDestinyY() {
+		return 0;
 	}
 	
 

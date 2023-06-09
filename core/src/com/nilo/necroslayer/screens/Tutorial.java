@@ -27,7 +27,7 @@ public class Tutorial extends Level implements InputProcessor{
 	private boolean movedUp = false;
 	private boolean movedDown = false;
 	private int[] foreground = {3};
-	Mapper map1 = new Mapper();
+	Mapper map1 = new Mapper(this.game);
 	private ArrayList<String> texto = new ArrayList<String>();
 	
 	private int spikelayer[] = {4,5};
@@ -36,8 +36,8 @@ public class Tutorial extends Level implements InputProcessor{
 	private int portalayer[] = {10};
 	public Tutorial(int width, int height, String mapname, Player player, Bloco[][] blocos, Necroslayer game,
 			int playerX, int playerY) {
-		super(width, height, mapname, player, blocos, game, playerX, playerY);
-		texto.add("Seja bem vindo ao projeto de POO");
+		super(width, height, mapname, player, blocos, game, playerX, playerY, false);
+		texto.add("Seja bem vindo ao projeto de POO                                        Pressione Z para prosseguir.");
 		texto.add("Nesse jogo você vai testar suas habilidades em Programação orientadada a objeto, junto com desafios e lutas contra monstros");
 		texto.add("Para começar use as setas para se mover");
 		this.game.dialogo.setDialogue(texto);
@@ -71,14 +71,14 @@ public class Tutorial extends Level implements InputProcessor{
 		
 		
 		
-		time = String.format("%f",this.game.elapsedTime);
-		cXY = String.format("%f , %f",player.getTileX(),player.getTileY());
-		tXY = String.format("%d , %d",player.targetX, player.targetY);
-		pXY = String.format("%f , %f",player.posX, player.posY);
-		font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
-		font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
-		font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
-		font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
+		//time = String.format("%f",this.game.elapsedTime);
+		//cXY = String.format("%f , %f",player.getTileX(),player.getTileY());
+		//tXY = String.format("%d , %d",player.targetX, player.targetY);
+		//pXY = String.format("%f , %f",player.posX, player.posY);
+		//font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
+		//font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
+		//font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
+		//font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
 		if(moveTutorial) {
 			tMR.render(spikelayer);
 		}
@@ -94,11 +94,27 @@ public class Tutorial extends Level implements InputProcessor{
 		game.dialogo.render(playcam, batch);
 		game.getCodeBlock().render(playcam, batch);
 		this.checkProgess();
+		this.logica();
 		batch.setProjectionMatrix(playcam.combined);
 		batch.end();
 	        
 			
 		}
+	public void dispose () {
+		batch.dispose();
+		textureAtlas.dispose();
+		Gdx.input.setInputProcessor(null);
+		
+	}
+	
+	public void logica () {
+		if(this.mapa.gridBlocos[player.targetX][player.targetY].checkPlayer(player.targetX, player.targetY)) {
+			int posX = player.targetX;
+			int posY = player.targetY;
+			this.player.setPos(this.game.getLevels().get(this.mapa.gridBlocos[player.targetX][player.targetY].getDestiny()));
+			this.game.setScreen(this.game.getLevels().get(this.mapa.gridBlocos[posX][posY].getDestiny()));
+		}
+	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
@@ -250,9 +266,9 @@ public class Tutorial extends Level implements InputProcessor{
 			}
 		}
 		if((player.targetX == 32) & (player.targetY == 9)) {
-			game.getLevels().add(new Level(20,16,"mercado.tmx",game.player, game.blocos, game, 10, 0));
-			game.getLevels().get(1).mapa = map1.mercado(game.getLevels().get(1).mapa);
-			game.setScreen(game.getLevels().get(1));
+			//game.player.setPos(game.getLevels().get(1));
+			//game.setScreen(game.getLevels().get(1));
+			
 		}
 	}
 

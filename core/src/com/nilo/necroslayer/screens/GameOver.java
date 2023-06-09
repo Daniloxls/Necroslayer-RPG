@@ -25,7 +25,7 @@ public class GameOver extends ScreenAdapter {
     Viewport titleView;
     ScreenAdapter lastScreen;
     Level level;
-    Mapper map1 = new Mapper();
+    Mapper map1 = new Mapper(this.game);
     public GameOver(Necroslayer game, ScreenAdapter lastScreen) {
         this.game = game;
         this.lastScreen = lastScreen;
@@ -43,8 +43,8 @@ public class GameOver extends ScreenAdapter {
                 if (keyCode == Input.Keys.SPACE) {
                 	game.player = new Player();
                 	game.setLevels(new ArrayList<Level>());
-                	game.getLevels().add(new Level(23,20,"castelo_1.tmx",game.player, game.blocos, game, 11, 16));
-                	game.getLevels().get(0).mapa = map1.mapa_1(game.getLevels().get(0).mapa);
+                	game.getLevels().add(new Tutorial(36,11,"tutorial.tmx",game.player, game.blocos, game, 7, 6));
+                	game.getLevels().get(0).mapa = map1.tutorial(game.getLevels().get(0).mapa);
                 	game.setScreen(game.getLevels().get(0));
                 }
                 return true;

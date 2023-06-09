@@ -27,6 +27,25 @@ public class PlayerCamera extends OrthographicCamera{
 		}
 		this.update();
 	}
+	
+	PlayerCamera(int x, int y, MapaBlocos mapa){
+		this.near = 0;
+		if (x > mapa.width - 7) {
+			this.position.x = (mapa.width-8)*64;
+		}else if( x > 8){
+			this.position.x = x*64;
+		}else if (x <= 8) {
+			this.position.x = GAME_WORLD_WIDTH/2;
+		}
+		if (y > mapa.height - 4.5) {
+			this.position.y = (mapa.height*64)-288;
+		}else if( y > 4.5){
+			this.position.y = y*64;
+		}else if (y <= 4.5) {
+			this.position.y = GAME_WORLD_HEIGHT/2;
+		}
+		this.update();
+	}
 
 	
 	public void follow(Player player, MapaBlocos mapa) {

@@ -97,16 +97,17 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor{
         	int i = 0;
         	for(Charac c: this.player.party.getComp()) {
         		font.draw(batch, menu.getSelectedMenu().getName().toUpperCase(), 50, this.game.GAME_WORLD_HEIGHT - 50);
-            	font.draw(batch,c.getName(), 50, 483 - (i*100));
-            	batch.draw(c.getSprite(0), 50, 380 - (i*100), 0, 0, 30, 30,3, 3, 0);
+            	font.draw(batch,c.getName(), 50, 500 - (i*120));
+            	batch.draw(c.getSprite(), 50, 390 - (i*120), 0, 0, 30, 30,3, 3, 0);
             	int[] pos = {20, 380 - (i*100)};
             	c.setPosOnPartyTab(pos);
             	//
-            	font.draw(batch, "HP:" + String.valueOf(c.getHp())+ "/" + String.valueOf(c.getMaxHp()), 130, 450 - (i*100));
-            	font.draw(batch, "MP:" + String.valueOf(c.getMp()) + "/" + String.valueOf(c.getMaxMp()), 130, 420 - (i*100));
-            	font.draw(batch, "LVL:" + String.valueOf(c.getLevel()), 250, 450 - (i*100));
+            	font.draw(batch, "HP:" + String.valueOf(c.getHp())+ "/" + String.valueOf(c.getMaxHp()), 150, 450 - (i*120));
+            	font.draw(batch, "MP:" + String.valueOf(c.getMp()) + "/" + String.valueOf(c.getMaxMp()), 150, 420 - (i*120));
+            	font.draw(batch, "LVL:" + String.valueOf(c.getLevel()), 250, 450 - (i*120));
             	i++;
         	}
+        	font.draw(batch, "Gold :" + String.valueOf(this.player.getGold()), 800, 40);
         	if(selecionado) {
         		batch.draw(maozinha, ((PartyTab) menu.getSelectedMenu()).getSelected().getPosOnPartyTab()[0], ((PartyTab) menu.getSelectedMenu()).getSelected().getPosOnPartyTab()[1],0, 0, 16, 16, 2, 2, 0);
         		

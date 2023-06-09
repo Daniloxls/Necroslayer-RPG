@@ -15,7 +15,7 @@ public class Faris extends Charac {
 	public Faris(){
 		this.setNumber(3);
 		this.setLevel(1);
-		this.setName("Faris");
+		this.setName("Guido");
 		this.setMaxHp(35);
 		this.setHp(this.getMaxHp());
 		this.setMaxMp(5);

@@ -21,9 +21,10 @@ public class TitleScreen extends ScreenAdapter {
     Texture texture;
     Viewport titleView;
     Level level;
-    Mapper map1 = new Mapper();
+    Mapper map1;
     public TitleScreen(Necroslayer game) {
         this.game = game;
+        this.map1 = new Mapper(game);
     }
 
     @Override
@@ -39,7 +40,15 @@ public class TitleScreen extends ScreenAdapter {
                 	game.player = new Player();
                 	game.getLevels().add(new Tutorial(36,11,"tutorial.tmx",game.player, game.blocos, game, 7, 6));
                 	game.getLevels().get(0).mapa = map1.tutorial(game.getLevels().get(0).mapa);
+                	game.getLevels().add(new Level(20,16,"mercado.tmx",game.player, game.blocos, game, 10, 0, false));
+        			game.getLevels().get(1).mapa = map1.mercado(game.getLevels().get(1).mapa);
+        			game.getLevels().add(new Level(10,8,"casa.tmx",game.player,game.blocos,game, 2, 0, false));
+        			game.getLevels().get(2).mapa = map1.casa(game.getLevels().get(2).mapa);
+        			game.getLevels().add(new Level(30,20,"floresta.tmx", game.player,game.blocos,game,0, 10, true));
+        			game.getLevels().get(3).mapa = map1.floresta(game.getLevels().get(3).mapa);
+        			game.player.setPos(game.getLevels().get(0));
                 	game.setScreen(game.getLevels().get(0));
+                	
                     
                     
                 }

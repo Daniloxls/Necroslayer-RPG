@@ -15,7 +15,7 @@ public class Bartz extends Charac{
 	public Bartz(){
 		this.setNumber(0);
 		this.setLevel(1);
-		this.setName("Bartz");
+		this.setName("Alan");
 		this.setMaxHp(36);
 		this.setHp(this.getMaxHp());
 		this.setMaxMp(5);

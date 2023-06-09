@@ -72,11 +72,11 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
     	audio = Gdx.audio;
     	theme = audio.newMusic(Gdx.files.internal("battle_theme.wav"));
     	victoryTheme = audio.newMusic(Gdx.files.internal("victory_theme.wav"));
-    	//theme.play();
+    	theme.play();
     	theme.setLooping(true);
     	random = new Random();
-		texture = new Texture(Gdx.files.internal("battleback8.png"));
-		background = new Sprite(texture,1104,621);
+		texture = new Texture(Gdx.files.internal("forest_back.png"));
+		background = new Sprite(texture,1024,576);
 		handTexture = new Texture(Gdx.files.internal("maozinha.png"));
 		cursorR = new Sprite(handTexture, 16, 16);
 		cursorL = new Sprite(handTexture, 16, 16);
@@ -119,7 +119,7 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
             }
         }else {*/
 	        for(Charac c : this.party.getComp()) {
-	        	batch.draw(c.getSprite(), 768, 364-(80 * c.getNumber()), 0, 0, 30, 30,
+	        	batch.draw(c.getSprite(), 768, 374-(80 * c.getNumber()), 0, 0, 30, 30,
 	    	    		3, 3, 0);
 	        	font.draw(batch,c.getName() , 786, 112-(c.getNumber() * 24));
 	        	font.draw(batch,String.valueOf(c.getHp()) + "/" + String.valueOf(c.getMaxHp()) , 866, 112-(c.getNumber() * 24));
@@ -177,11 +177,11 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
 		batch.draw(cursorR, 306, 70-(this.choiceIndex*24), 0, 0, 16, 16,
 	    		3, 3, 0);
 		game.dialogo.render(batch);
-		font.draw(batch, Integer.toString(partyIndex), 0, 566);
-		font.draw(batch, Boolean.toString(enemyTurn), 0, 551);
-		font.draw(batch, Boolean.toString(this.game.dialogo.getInDialogue()), 0,535);
-		font.draw(batch, Integer.toString(partyTarget), 0, 505);
-		font.draw(batch, Integer.toString(deadTarget), 0, 490);
+		//font.draw(batch, Integer.toString(partyIndex), 0, 566);
+		//font.draw(batch, Boolean.toString(enemyTurn), 0, 551);
+		//font.draw(batch, Boolean.toString(this.game.dialogo.getInDialogue()), 0,535);
+		//font.draw(batch, Integer.toString(partyTarget), 0, 505);
+		//font.draw(batch, Integer.toString(deadTarget), 0, 490);
 		this.logica();
         batch.end();
     }
@@ -496,6 +496,15 @@ public class Batalha extends ScreenAdapter implements InputProcessor{
         	this.victory = true;
         	this.lootText.add("Voce recebeu " + Integer.toString(this.xp) + " pontos de experiência");
         	this.lootText.add("Voce recebeu " + Integer.toString(this.loot) + " moedas de ouro");
+        	this.game.player.gainGold(this.loot);
+        	for(Charac c: this.party.getComp()) {
+        		c.setExp(c.getExp() + this.xp);
+        		if(c.getExp() >= c.getXpThreshold()[c.getLevel()]) {
+        			this.lootText.add(c.getName() + " subiu de nivel!");
+        			c.setExp(0);
+        			c.levelUp();
+        		}
+        	}
         	this.game.dialogo.setDialogue(lootText);
         	this.victoryTheme.play();
         }

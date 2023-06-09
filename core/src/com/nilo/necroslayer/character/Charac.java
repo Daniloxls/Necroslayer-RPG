@@ -26,7 +26,7 @@ public class Charac {
 	private int agility;
 	private int stamina;
 	private int magic;
-	private long exp;
+	private long exp = 0;
 	private int atk;
 	private int def;
 	private int evade;
@@ -47,6 +47,7 @@ public class Charac {
 	private boolean dead;
 	private Texture texture;
 	private Sprite onlySprite;
+	private int[] xpThreshold = {0,100,250,400,580,760,1000,999999};
 	Random generator = new Random();
 	
 	public int getHp() {
@@ -319,6 +320,26 @@ public class Charac {
 	}
 	public void setTexture(Texture texture) {
 		this.texture = texture;
+	}
+	public int[] getXpThreshold() {
+		return xpThreshold;
+	}
+	public void setXpThreshold(int[] xpThreshold) {
+		this.xpThreshold = xpThreshold;
+	}
+	public void levelUp() {
+		this.level += 1;
+		this.maxHp +=5;
+		this.maxMp += 3;
+		this.setHp(this.maxHp);
+		this.setMp(this.maxMp);
+		this.atk += 4;
+		this.def += 3;
+		this.strenght += 4;
+	}
+	public void rest() {
+		this.setHp(this.maxHp);
+		this.setMp(this.maxMp);
 	}
 
 }

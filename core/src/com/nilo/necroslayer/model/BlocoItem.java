@@ -69,8 +69,13 @@ public class BlocoItem {
 	public String getName() {
 		return Name;
 	}
-
+	
 	public void setName(String name) {
 		Name = name;
+	}
+	public void setDialogue(ArrayList<String> texto) {
+		this.dialogue = texto;
+		this.interactable = true;
+		this.hasDialogue = true;
 	}
 }

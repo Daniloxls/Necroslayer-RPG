@@ -2,6 +2,7 @@ package com.nilo.necroslayer.screens;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -42,6 +43,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	Viewport viewport;
 	Player player;
 	Sprite spriteanda;
+	Random random = new Random();
 	public Animation<Sprite> walkAnimation, testAnimation;
 	public OrthogonalTiledMapRenderer tMR;
 	public TiledMap tiledMap;
@@ -50,6 +52,8 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	public TextureAtlas textureAtlas;
 	public SpriteBatch batch;
 	public BitmapFont font;
+	private boolean wild;
+	private int playerX, playerY;
 	public final int GAME_WORLD_HEIGHT = 576;
 	public final int GAME_WORLD_WIDTH = 1024;
 	public String time, cXY, tXY, pXY;
@@ -58,13 +62,15 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	public Level(Necroslayer game) {
 		this.game = game;
 	}
-	public Level(int width, int height, String mapname, Player player, Bloco[][] blocos, Necroslayer game, int playerX, int playerY){
+	public Level(int width, int height, String mapname, Player player, Bloco[][] blocos, Necroslayer game, int playerX, int playerY, boolean wild){
 		mapa = new MapaBlocos(width,height);
 		this.game = game;
 		tiledMap = new TmxMapLoader().load(mapname);
 		tMR = new OrthogonalTiledMapRenderer(tiledMap, 4);
 		this.player = player;
-		this.player.setPos(playerX, playerY);
+		this.setPlayerX(playerX);
+		this.setPlayerY(playerY);
+		this.wild = wild;
 		playcam = new PlayerCamera(player, mapa);
 		playcam.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
@@ -77,6 +83,7 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		walkAnimation = player.currentAnimation;
+		playcam = new PlayerCamera(player, mapa);
 		playcam.update();
 		viewport = new FitViewport(GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT, playcam);
 		viewport.apply();
@@ -107,20 +114,18 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		batch.draw(spriteanda, player.posX, player.posY, 0, 0, 16, 20,
 		    		4, 4, 0);
 		mapa.renderItems(batch);
-		
-		game.dialogo.render(playcam, batch);
-		game.getCodeBlock().render(playcam, batch);
-		
 		time = String.format("%f",this.game.elapsedTime);
 		cXY = String.format("%f , %f",player.getTileX(),player.getTileY());
 		tXY = String.format("%d , %d",player.targetX, player.targetY);
 		pXY = String.format("%f , %f",player.posX, player.posY);
-		
-		font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
-		font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
-		font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
-		font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
+		this.logica();
+		//font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
+		//font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
+		//font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
+		//font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
 		tMR.render(foregroundLayers);
+		game.dialogo.render(playcam, batch);
+		game.getCodeBlock().render(playcam, batch);
 		batch.setProjectionMatrix(playcam.combined);
 		batch.end();
 	        
@@ -131,6 +136,41 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		textureAtlas.dispose();
 		Gdx.input.setInputProcessor(null);
 		
+	}
+	public void logica () {
+		if(this.mapa.gridBlocos[player.targetX][player.targetY].checkPlayer(player.targetX, player.targetY)) {
+			int posX = player.targetX;
+			int posY = player.targetY;
+			this.player.setPos(this.mapa.gridBlocos[player.targetX][player.targetY].getDestinyX(),this.mapa.gridBlocos[player.targetX][player.targetY].getDestinyY());
+			this.game.setScreen(this.game.getLevels().get(this.mapa.gridBlocos[posX][posY].getDestiny()));
+		}
+		if((this.player.isWalking) && (this.wild)) {
+			if(random.nextInt(1000) == 0) {
+				player.isMovingLeft = false;
+				player.isMovingRight = false;
+				player.isMovingDown = false;
+				player.isMovingUp = false;
+				Gdx.input.setInputProcessor(null);
+				switch(random.nextInt(4)) {
+				case(0):
+					this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy())));
+					break;
+				
+				case(1):
+					this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy(),new Enemy())));
+					break;
+				
+				case(2):
+					this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy(),new Enemy(),new Enemy())));
+					break;
+				
+				case(3):
+					this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy(),new Enemy(),new Enemy(),new Enemy())));
+					break;
+				
+				}
+			}
+		}
 	}
 	@Override
 	public boolean keyDown(int keycode) {
@@ -148,6 +188,12 @@ public class Level extends ScreenAdapter implements InputProcessor{
 			player.isMovingUp = false;
 			Gdx.input.setInputProcessor(null);
 			this.game.setScreen(new Batalha(this.game, this.player.party, this, new EnemyGroup(new Enemy(),new Enemy(),new Enemy())));
+		}
+		if(keycode == Keys.SPACE) {
+			System.out.printf("this.mapa.gridBlocos[%d][%d].setCenario(\"\");\n", this.player.targetX, this.player.targetY);
+		}
+		if(keycode == Keys.A) {
+			System.out.printf("this.mapa.gridBlocos[%d][%d].isWalkable = false;\n", this.player.targetX, this.player.targetY);
 		}
 		if(keycode == Keys.Z) {
 			if(!game.getCodeBlock().isShowingCode()) {
@@ -236,5 +282,17 @@ public class Level extends ScreenAdapter implements InputProcessor{
 	public boolean scrolled(float amountX, float amountY) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public int getPlayerX() {
+		return playerX;
+	}
+	public void setPlayerX(int playerX) {
+		this.playerX = playerX;
+	}
+	public int getPlayerY() {
+		return playerY;
+	}
+	public void setPlayerY(int playerY) {
+		this.playerY = playerY;
 	}
 	}

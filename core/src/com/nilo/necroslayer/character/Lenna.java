@@ -13,7 +13,7 @@ public class Lenna extends Charac {
 	public Lenna(){
 		this.setNumber(1);
 		this.setLevel(1);
-		this.setName("Lenna");
+		this.setName("Kath");
 		this.setMaxHp(35);
 		this.setHp(this.getMaxHp());
 		this.setMaxMp(5);

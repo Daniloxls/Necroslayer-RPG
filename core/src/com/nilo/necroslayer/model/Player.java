@@ -9,6 +9,7 @@ import com.nilo.necroslayer.character.Faris;
 import com.nilo.necroslayer.character.Galuf;
 import com.nilo.necroslayer.character.Lenna;
 import com.nilo.necroslayer.character.Party;
+import com.nilo.necroslayer.screens.Level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -77,6 +78,9 @@ public class Player extends Actor {
 		this.targetY = y;
 		this.posX = x*64;
 		this.posY = y*64;
+	}
+	public void setPos(Level level) {
+		this.setPos(level.getPlayerX(), level.getPlayerY());
 	}
 	public void setAnimation() {
 		if(this.isWalking) {
@@ -320,5 +324,8 @@ public class Player extends Actor {
 	}
 	public void setGold(int gold) {
 		this.gold = gold;
+	}
+	public void gainGold(int gold) {
+		this.gold += gold;
 	}
 }
