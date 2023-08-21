@@ -119,10 +119,10 @@ public class Level extends ScreenAdapter implements InputProcessor{
 		tXY = String.format("%d , %d",player.targetX, player.targetY);
 		pXY = String.format("%f , %f",player.posX, player.posY);
 		this.logica();
-		//font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
-		//font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
-		//font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
-		//font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
+		font.draw(batch, time, playcam.position.x - 512, playcam.position.y + 288);
+		font.draw(batch, cXY, playcam.position.x - 512, playcam.position.y + 273);
+		font.draw(batch, tXY, playcam.position.x - 512, playcam.position.y + 258);
+		font.draw(batch, pXY, playcam.position.x - 512, playcam.position.y + 243);
 		tMR.render(foregroundLayers);
 		game.dialogo.render(playcam, batch);
 		game.getCodeBlock().render(playcam, batch);
